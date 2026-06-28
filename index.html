@@ -66,7 +66,7 @@
             <!-- Progress / Achievements -->
             <div class="flex items-center space-x-3 bg-indigo-700 px-4 py-1.5 rounded-full border border-indigo-500">
                 <span class="text-amber-300 font-bold">⭐ Skor Kuis:</span>
-                <span id="header-stars" class="font-black text-white font-kids">0 / 110</span>
+                <span id="header-stars" class="font-black text-white font-kids">0 ⭐</span>
             </div>
         </div>
     </header>
@@ -384,87 +384,101 @@
         </section>
 
 
-        <!-- ================= TAB: THE REINFORCEMENT QUIZ ================= -->
+        <!-- ================= TAB: THE REINFORCEMENT QUIZ (UPGRADED DINAMIS) ================= -->
         <section id="sec-quiz" class="tab-content hidden space-y-6">
             <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                 <div>
                     <h2 class="text-3xl font-black text-slate-800 font-kids">📝 Bab 4: Lembar Latihan Mandiri Interaktif</h2>
-                    <p class="text-slate-500 text-sm">Selesaikan 11 soal latihan di bawah ini untuk meraih lencana kejuaraan matematika!</p>
+                    <p class="text-slate-500 text-sm">Kuis Tanpa Batas! Pilih kategori operasi, tentukan tingkat kesulitan, lalu asah logikamu sepuasnya.</p>
                 </div>
                 <!-- Mini Progress Tracker -->
                 <div class="flex items-center space-x-2 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-2 self-start sm:self-auto">
-                    <span class="text-xs text-indigo-700 font-bold">Progress Kuis:</span>
-                    <span id="quiz-progress-text" class="font-black text-indigo-900 font-kids">0 / 11 Soal</span>
+                    <span class="text-xs text-indigo-700 font-bold">Akurasi Sesi:</span>
+                    <span id="quiz-session-stats" class="font-black text-indigo-900 font-kids">0 / 0 Dijawab</span>
                 </div>
             </div>
 
             <!-- Quiz Layout Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Left: Question Bank Nav -->
-                <div class="lg:col-span-4 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-4">
-                    <span class="text-xs font-black text-slate-400 uppercase tracking-wider block">Navigasi Soal:</span>
+                <!-- Left: Category & Difficulty Mode Selection -->
+                <div class="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-5">
                     
-                    <!-- Bab Groupings -->
-                    <div class="space-y-3">
-                        <div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">Bab 1: Bilangan Bulat</span>
-                            <div class="grid grid-cols-5 gap-1.5" id="nav-group-bab1">
-                                <!-- Generated buttons for Q1-Q5 -->
-                            </div>
-                        </div>
-
-                        <div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">Bab 2: Perkalian Bersusun</span>
-                            <div class="grid grid-cols-5 gap-1.5" id="nav-group-bab2">
-                                <!-- Generated buttons for Q6-Q8 -->
-                            </div>
-                        </div>
-
-                        <div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">Bab 3: Porogapit</span>
-                            <div class="grid grid-cols-5 gap-1.5" id="nav-group-bab3">
-                                <!-- Generated for Q9-Q11 -->
-                            </div>
+                    <!-- Category tab selectors inside side panel -->
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block">1. Pilih Operasi Matematika</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setQuizCategory('tambah')" id="btn-quiz-cat-tambah" class="py-2 px-3 text-xs font-black rounded-xl border-2 transition-all flex items-center justify-center gap-1.5">
+                                ➕ Tambah
+                            </button>
+                            <button onclick="setQuizCategory('kurang')" id="btn-quiz-cat-kurang" class="py-2 px-3 text-xs font-black rounded-xl border-2 transition-all flex items-center justify-center gap-1.5">
+                                ➖ Kurang
+                            </button>
+                            <button onclick="setQuizCategory('kali')" id="btn-quiz-cat-kali" class="py-2 px-3 text-xs font-black rounded-xl border-2 transition-all flex items-center justify-center gap-1.5">
+                                ✖️ Kali
+                            </button>
+                            <button onclick="setQuizCategory('bagi')" id="btn-quiz-cat-bagi" class="py-2 px-3 text-xs font-black rounded-xl border-2 transition-all flex items-center justify-center gap-1.5">
+                                ➗ Bagi
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Reset Quiz Button -->
-                    <button onclick="resetEntireQuiz()" class="w-full mt-4 py-2 border border-slate-200 text-slate-500 hover:bg-slate-50 text-xs font-bold rounded-lg transition">
-                        Reset Hasil Kuis 🔄
+                    <!-- Dynamic Mode list based on selection -->
+                    <div class="space-y-2 border-t border-slate-100 pt-3">
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block">2. Pilih Tingkat Kesulitan</span>
+                        <div class="flex flex-col gap-2" id="quiz-mode-container">
+                            <!-- Injected dynamically based on active category -->
+                        </div>
+                    </div>
+
+                    <!-- Reset Score Button -->
+                    <button onclick="resetQuizStats()" class="w-full mt-4 py-2 border border-slate-200 text-slate-500 hover:bg-slate-50 text-xs font-bold rounded-lg transition">
+                        Reset Statistik Sesi 🔄
                     </button>
                 </div>
 
-                <!-- Right: Active Question Frame -->
-                <div class="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between min-h-[380px]">
+                <!-- Right: Active Question Frame (Dynamic Generation) -->
+                <div class="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between min-h-[420px]">
                     <div class="space-y-6">
                         <!-- Heading of Question Card -->
                         <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                            <span id="quiz-badge-category" class="px-2.5 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-black rounded-lg uppercase tracking-wide">
+                            <span id="quiz-active-badge" class="px-2.5 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-black rounded-lg uppercase tracking-wide">
                                 Kategori
                             </span>
-                            <span id="quiz-item-status" class="text-xs font-bold text-slate-400">Belum Dijawab</span>
+                            <span id="quiz-active-status" class="text-xs font-bold text-slate-400">Menunggu Jawaban</span>
                         </div>
 
                         <!-- Question Prompt -->
                         <div class="space-y-3">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pertanyaan ke-<span id="quiz-display-num">1</span>:</span>
-                            <h3 id="quiz-prompt-text" class="text-2xl md:text-3xl font-black text-slate-800 font-kids leading-relaxed">
-                                Loading question...
-                            </h3>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Tantangan untukmu:</span>
+                            <div class="flex items-center gap-4">
+                                <h3 id="quiz-active-prompt" class="text-3xl md:text-4xl font-black text-slate-800 font-kids leading-relaxed">
+                                    00 + 00 = ?
+                                </h3>
+                            </div>
                         </div>
 
                         <!-- Interactive Answers Selection -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2" id="quiz-options-container">
-                            <!-- Injected button options -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2" id="quiz-active-options">
+                            <!-- Options rendered dynamically -->
                         </div>
                     </div>
 
+                    <!-- Footer of Active Frame (New Question control) -->
+                    <div class="flex justify-between items-center border-t border-slate-100 pt-4 mt-6">
+                        <div class="text-xs text-slate-400 font-bold">
+                            Skor benar bernilai <span class="text-indigo-600">+10 ⭐</span>
+                        </div>
+                        <button onclick="generateNextQuizQuestion()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm">
+                            Soal Baru 🔁
+                        </button>
+                    </div>
+
                     <!-- Interactive solution step-by-step display upon submission -->
-                    <div id="quiz-solution-card" class="hidden mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2 text-slate-700 text-sm">
+                    <div id="quiz-active-solution-card" class="hidden mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2 text-slate-700 text-sm">
                         <span class="font-black text-amber-900 font-kids flex items-center gap-1">💡 Pembahasan Langkah Kerja:</span>
-                        <p id="quiz-solution-text" class="leading-relaxed text-xs">
-                            Lorem ipsum dolor sit amet...
-                        </p>
+                        <div id="quiz-active-solution-text" class="leading-relaxed text-xs space-y-2">
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -562,7 +576,15 @@
                 currentStep: 0,
                 steps: []
             },
-            quizAnswers: {}, // Stores index of selected answers by question (1-11)
+            quiz: {
+                category: 'tambah', // 'tambah', 'kurang', 'kali', 'bagi'
+                mode: 'puluhan',    // 'puluhan', 'ratusan', 'ribuan', 'p_x_s', 'r_x_s', 'p_x_p', 'r_x_p'
+                currentQuestion: null,
+                answered: false,
+                chosenIdx: -1,
+                sessionCorrect: 0,
+                sessionTotal: 0
+            },
             quizScores: 0 // stars accumulated
         };
 
@@ -594,8 +616,7 @@
             } else if (tabId === 'bab3') {
                 resetDivSimulator();
             } else if (tabId === 'quiz') {
-                renderQuizLayout();
-                loadQuestion(activeQuizNum);
+                initQuiz();
             }
         }
 
@@ -1447,276 +1468,386 @@
         }
 
 
-        // ================= BAB 4: QUIZ INTERACTIVE =================
-        const QUIZ_ITEMS = [
-            // Bab 1
-            {
-                num: 1,
-                bab: 1,
-                category: "Bilangan Bulat",
-                prompt: "Berapa hasil dari 24 + (-15)?",
-                options: ["9", "-9", "39", "-39"],
-                correctIdx: 0,
-                solution: "Kamu punya uang 24, sedangkan hutangmu sebesar 15. Bayar hutang dengan uang tersebut, sehingga sisa uangmu sekarang adalah 24 − 15 = 9."
+        // ================= BAB 4: INFINITE INTERACTIVE QUIZ ENGINE =================
+        const QUIZ_CONFIGS = {
+            tambah: {
+                title: "Kuis Penjumlahan Bersusun",
+                modes: [
+                    { key: "puluhan", label: "Puluhan (10 - 99)" },
+                    { key: "ratusan", label: "Ratusan (100 - 999)" },
+                    { key: "ribuan", label: "Ribuan (1.000 - 9.999)" }
+                ]
             },
-            {
-                num: 2,
-                bab: 1,
-                category: "Bilangan Bulat",
-                prompt: "Berapa hasil dari -18 + (-7)?",
-                options: ["-11", "11", "-25", "25"],
-                correctIdx: 2,
-                solution: "Kamu memiliki hutang sebesar 18, lalu kamu berhutang lagi sebesar 7. Karena berhutang dua kali berturut-turut, total hutangmu bertambah menumpuk menjadi -18 + (-7) = -25."
+            kurang: {
+                title: "Kuis Pengurangan Bersusun",
+                modes: [
+                    { key: "puluhan", label: "Puluhan (10 - 99)" },
+                    { key: "ratusan", label: "Ratusan (100 - 999)" },
+                    { key: "ribuan", label: "Ribuan (1.000 - 9.999)" }
+                ]
             },
-            {
-                num: 3,
-                bab: 1,
-                category: "Bilangan Bulat",
-                prompt: "Berapa hasil dari -12 + 20?",
-                options: ["32", "8", "-8", "-32"],
-                correctIdx: 1,
-                solution: "Hutang awalmu adalah 12, lalu dibayar dengan uang saku sebesar 20. Karena uangmu lebih banyak dari hutang, sisa uang yang kamu miliki sekarang adalah 20 − 12 = 8."
+            kali: {
+                title: "Kuis Perkalian Bersusun",
+                modes: [
+                    { key: "p_x_s", label: "Puluhan × Satuan" },
+                    { key: "r_x_s", label: "Ratusan × Satuan" },
+                    { key: "p_x_p", label: "Puluhan × Puluhan" },
+                    { key: "r_x_p", label: "Ratusan × Puluhan" }
+                ]
             },
-            {
-                num: 4,
-                bab: 1,
-                category: "Bilangan Bulat",
-                prompt: "Berapa hasil dari 15 - (-8)?",
-                options: ["7", "-7", "23", "-23"],
-                correctIdx: 2,
-                solution: "Menggunakan Trik Mantra Sihir: Tanda minus ganda yang berhimpitan berubah menjadi tambah. Maka persamaannya berubah menjadi 15 + 8 = 23."
-            },
-            {
-                num: 5,
-                bab: 1,
-                category: "Bilangan Bulat",
-                prompt: "Berapa hasil dari -9 - (-14)?",
-                options: ["5", "-5", "-23", "23"],
-                correctIdx: 0,
-                solution: "Tanda ganda berubah menjadi tambah: -9 - (-14) = -9 + 14. Hutangmu 9 dibayar dengan uang saku sebesar 14, maka kamu memiliki sisa uang sebanyak 14 − 9 = 5."
-            },
-            // Bab 2
-            {
-                num: 6,
-                bab: 2,
-                category: "Perkalian Bersusun",
-                prompt: "Berapakah hasil dari 48 × 12?",
-                options: ["486", "526", "576", "616"],
-                correctIdx: 2,
-                solution: "Langkah bersusun:<br>1) Kalikan 48 × 2 = 96<br>2) Kalikan 48 × 1 = 48 (geser ke kiri satu kolom)<br>3) Jumlahkan: 96 + 480 = 576."
-            },
-            {
-                num: 7,
-                bab: 2,
-                category: "Perkalian Bersusun",
-                prompt: "Berapakah hasil dari 135 × 24?",
-                options: ["3.120", "3.240", "2.980", "3.360"],
-                correctIdx: 1,
-                solution: "Langkah bersusun:<br>1) 135 × 4 = 540<br>2) 135 × 2 = 270 (ditulis bergeser)<br>3) Jumlahkan hasil: 540 + 2.700 = 3.240."
-            },
-            {
-                num: 8,
-                bab: 2,
-                category: "Perkalian Bersusun",
-                prompt: "Berapakah hasil dari 207 × 46?",
-                options: ["9.522", "9.432", "8.912", "9.802"],
-                correctIdx: 0,
-                solution: "Langkah bersusun:<br>1) 207 × 6 = 1.242<br>2) 207 × 4 = 828 (geser satu kolom)<br>3) Jumlahkan hasil: 1.242 + 8.280 = 9.522."
-            },
-            // Bab 3
-            {
-                num: 9,
-                bab: 3,
-                category: "Porogapit",
-                prompt: "Selesaikan pembagian 432 ÷ 4 memakai porogapit!",
-                options: ["18", "108", "118", "180"],
-                correctIdx: 1,
-                solution: "Ingat aturan emas nol! <br>• 4 ÷ 4 = 1<br>• Turunkan angka 3. Karena 3 tidak bisa dibagi 4, <b>tulis 0 di atas</b>!<br>• Baru setelah itu kamu boleh menurunkan angka 2 berikutnya sehingga terbentuk angka 32.<br>• 32 ÷ 4 = 8. Hasil akhir adalah 108."
-            },
-            {
-                num: 10,
-                bab: 3,
-                category: "Porogapit",
-                prompt: "Berapakah hasil dari pembagian 912 ÷ 8?",
-                options: ["114", "104", "124", "116"],
-                correctIdx: 0,
-                solution: "Langkah porogapit:<br>1) 9 ÷ 8 = 1 (sisa 1), turunkan angka 1 menjadi 11.<br>2) 11 ÷ 8 = 1 (sisa 3), turunkan angka 2 menjadi 32.<br>3) 32 ÷ 8 = 4. Hasil akhir digabungkan: 114."
-            },
-            {
-                num: 11,
-                bab: 3,
-                category: "Porogapit (Dua Digit)",
-                prompt: "Selesaikan tantangan pembagi dua digit: 1.625 ÷ 13!",
-                options: ["115", "125", "135", "145"],
-                correctIdx: 1,
-                solution: "Porogapit pembagi 13:<br>• Karena pembagi berukuran 2 digit, ambil 16 sekaligus: 16 ÷ 13 = 1 (sisa 3), turunkan 2 menjadi 32.<br>• 32 ÷ 13 = 2 (karena 13 × 2 = 26), sisa pengurangan 32 − 26 = 6, turunkan 5 menjadi 65.<br>• 65 ÷ 13 = 5. Hasil akhirnya adalah 125."
+            bagi: {
+                title: "Kuis Pembagian Porogapit",
+                modes: [
+                    { key: "puluhan", label: "Puluhan ÷ Satuan" },
+                    { key: "ratusan", label: "Ratusan ÷ Satuan" },
+                    { key: "ribuan", label: "Ribuan ÷ Satuan" }
+                ]
             }
-        ];
+        };
 
-        let activeQuizNum = 1; // start from Q1
+        function initQuiz() {
+            // Load saved stars
+            const savedScore = localStorage.getItem('smp_math_quiz_score');
+            if (savedScore) {
+                appState.quizScores = parseInt(savedScore) || 0;
+            }
+            updateScoreDisplay();
 
-        function renderQuizLayout() {
-            // Generate Navs
-            const g1 = document.getElementById('nav-group-bab1');
-            const g2 = document.getElementById('nav-group-bab2');
-            const g3 = document.getElementById('nav-group-bab3');
+            // Set default category & mode if empty
+            if (!appState.quiz.category) {
+                appState.quiz.category = 'tambah';
+            }
+            const modes = QUIZ_CONFIGS[appState.quiz.category].modes;
+            const hasActiveMode = modes.some(m => m.key === appState.quiz.mode);
+            if (!hasActiveMode) {
+                appState.quiz.mode = modes[0].key;
+            }
 
-            g1.innerHTML = '';
-            g2.innerHTML = '';
-            g3.innerHTML = '';
+            renderQuizControlPanel();
+            generateNextQuizQuestion();
+        }
 
-            QUIZ_ITEMS.forEach(q => {
-                const btn = document.createElement('button');
-                btn.id = 'quiz-nav-btn-' + q.num;
-                btn.onclick = () => { selectQuestion(q.num); };
-                btn.className = getQuizNavStyle(q.num);
-                btn.textContent = q.num;
+        function setQuizCategory(category) {
+            playSfx('click');
+            appState.quiz.category = category;
+            appState.quiz.mode = QUIZ_CONFIGS[category].modes[0].key; // default to first mode
 
-                if (q.bab === 1) g1.appendChild(btn);
-                else if (q.bab === 2) g2.appendChild(btn);
-                else if (q.bab === 3) g3.appendChild(btn);
+            renderQuizControlPanel();
+            generateNextQuizQuestion();
+        }
+
+        function setQuizMode(mode) {
+            playSfx('click');
+            appState.quiz.mode = mode;
+
+            renderQuizControlPanel();
+            generateNextQuizQuestion();
+        }
+
+        function renderQuizControlPanel() {
+            const cat = appState.quiz.category;
+            const activeMode = appState.quiz.mode;
+
+            // Highlight Category Button
+            const categories = ['tambah', 'kurang', 'kali', 'bagi'];
+            categories.forEach(c => {
+                const btn = document.getElementById('btn-quiz-cat-' + c);
+                if (c === cat) {
+                    btn.className = "py-2.5 px-3 text-xs font-black rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-950 scale-105 shadow-sm";
+                } else {
+                    btn.className = "py-2.5 px-3 text-xs font-bold rounded-xl border-2 border-slate-200 bg-white text-slate-600 hover:bg-slate-50";
+                }
             });
 
-            // Update score
-            updateScoreDisplay();
+            // Render Modes inside container
+            const modeContainer = document.getElementById('quiz-mode-container');
+            modeContainer.innerHTML = '';
+
+            const availableModes = QUIZ_CONFIGS[cat].modes;
+            availableModes.forEach(m => {
+                const btn = document.createElement('button');
+                btn.className = m.key === activeMode 
+                    ? "w-full py-2.5 px-4 text-xs font-black rounded-xl border-2 border-indigo-500 bg-indigo-600 text-white text-left shadow-sm flex justify-between items-center"
+                    : "w-full py-2.5 px-4 text-xs font-semibold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-left transition";
+                
+                btn.onclick = () => setQuizMode(m.key);
+                btn.innerHTML = `
+                    <span>🎯 ${m.label}</span>
+                    ${m.key === activeMode ? '<span>⚡</span>' : ''}
+                `;
+                modeContainer.appendChild(btn);
+            });
+
+            // Update stats
+            document.getElementById('quiz-session-stats').textContent = `${appState.quiz.sessionCorrect} / ${appState.quiz.sessionTotal} Dijawab`;
         }
 
-        function getQuizNavStyle(num) {
-            const answered = appState.quizAnswers[num] !== undefined;
-            const isActive = activeQuizNum === num;
+        function generateNextQuizQuestion() {
+            const cat = appState.quiz.category;
+            const mode = appState.quiz.mode;
 
-            if (isActive) {
-                return "py-2 text-sm font-black rounded-lg border-2 border-indigo-600 bg-indigo-100 text-indigo-950 scale-105 shadow-sm";
+            let numA = 0;
+            let numB = 0;
+            let ans = 0;
+            let promptText = "";
+
+            // Helper to get random ranges
+            const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+            if (cat === 'tambah') {
+                if (mode === 'puluhan') {
+                    numA = rand(10, 99); numB = rand(10, 99);
+                } else if (mode === 'ratusan') {
+                    numA = rand(100, 999); numB = rand(100, 999);
+                } else {
+                    numA = rand(1000, 9999); numB = rand(1000, 9999);
+                }
+                ans = numA + numB;
+                promptText = `${numA} + ${numB} = ?`;
+            } 
+            else if (cat === 'kurang') {
+                if (mode === 'puluhan') {
+                    numA = rand(10, 99); numB = rand(10, numA);
+                } else if (mode === 'ratusan') {
+                    numA = rand(100, 999); numB = rand(10, numA);
+                } else {
+                    numA = rand(1000, 9999); numB = rand(100, numA);
+                }
+                ans = numA - numB;
+                promptText = `${numA} − ${numB} = ?`;
+            } 
+            else if (cat === 'kali') {
+                if (mode === 'p_x_s') {
+                    numA = rand(10, 99); numB = rand(2, 9);
+                } else if (mode === 'r_x_s') {
+                    numA = rand(100, 999); numB = rand(2, 9);
+                } else if (mode === 'p_x_p') {
+                    numA = rand(10, 99); numB = rand(10, 99);
+                } else {
+                    numA = rand(100, 999); numB = rand(10, 99);
+                }
+                ans = numA * numB;
+                promptText = `${numA} × ${numB} = ?`;
+            } 
+            else if (cat === 'bagi') {
+                // Ensure nice divisibility
+                numB = rand(2, 9);
+                let multiplier = 0;
+                if (mode === 'puluhan') {
+                    multiplier = rand(5, 12);
+                } else if (mode === 'ratusan') {
+                    multiplier = rand(15, 120);
+                } else {
+                    multiplier = rand(125, 999);
+                }
+                numA = numB * multiplier;
+                ans = multiplier;
+                promptText = `${numA} ÷ ${numB} = ?`;
             }
-            if (answered) {
-                const isCorrect = appState.quizAnswers[num] === QUIZ_ITEMS[num-1].correctIdx;
-                return `py-2 text-sm font-bold rounded-lg border-2 ${isCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-rose-500 border-rose-600 text-white'}`;
+
+            // Generate distractors
+            let options = [ans];
+            let tries = 0;
+            // set range offset depending on the scale of answer
+            let range = ans > 1000 ? 50 : (ans > 100 ? 15 : 8);
+
+            while (options.length < 4 && tries < 100) {
+                let offset = rand(-range, range);
+                if (offset === 0) offset = (Math.random() > 0.5 ? 1 : -1) * 10;
+                let wrongVal = ans + offset;
+
+                // Carry mistake simulation
+                if (Math.random() > 0.7) {
+                    let offMultiplier = Math.random() > 0.5 ? 10 : 100;
+                    wrongVal = ans + (Math.random() > 0.5 ? 1 : -1) * offMultiplier;
+                }
+
+                if (wrongVal > 0 && wrongVal !== ans && !options.includes(wrongVal)) {
+                    options.push(wrongVal);
+                }
+                tries++;
             }
-            return "py-2 text-sm font-semibold rounded-lg border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100";
+
+            // Fallback if we fail to get 4 unique options
+            while (options.length < 4) {
+                let fallback = ans + (options.length * 5);
+                if (!options.includes(fallback)) options.push(fallback);
+            }
+
+            // Shuffle
+            options.sort(() => Math.random() - 0.5);
+
+            // Store current Question state
+            appState.quiz.currentQuestion = {
+                numA,
+                numB,
+                ans,
+                promptText,
+                options,
+                correctIdx: options.indexOf(ans)
+            };
+
+            appState.quiz.answered = false;
+            appState.quiz.chosenIdx = -1;
+
+            // Render UI
+            document.getElementById('quiz-active-badge').textContent = QUIZ_CONFIGS[cat].title;
+            document.getElementById('quiz-active-status').textContent = "Menunggu Jawaban";
+            document.getElementById('quiz-active-status').className = "text-xs font-bold text-slate-400";
+            document.getElementById('quiz-active-prompt').textContent = promptText;
+            document.getElementById('quiz-active-solution-card').classList.add('hidden');
+
+            renderQuizOptions();
         }
 
-        function selectQuestion(num) {
-            playSfx('click');
-            activeQuizNum = num;
-            loadQuestion(num);
-            
-            // Re-render navs to update highlights
-            renderQuizLayout();
-        }
-
-        function loadQuestion(num) {
-            const q = QUIZ_ITEMS[num - 1];
-            document.getElementById('quiz-display-num').textContent = q.num;
-            document.getElementById('quiz-badge-category').textContent = q.category;
-            document.getElementById('quiz-prompt-text').textContent = q.prompt;
-
-            const answered = appState.quizAnswers[num] !== undefined;
-            const statusEl = document.getElementById('quiz-item-status');
-            const solutionCard = document.getElementById('quiz-solution-card');
-
-            if (answered) {
-                statusEl.className = "text-xs font-black text-emerald-600";
-                statusEl.textContent = "Sudah Dijawab";
-                solutionCard.classList.remove('hidden');
-                document.getElementById('quiz-solution-text').innerHTML = q.solution;
-            } else {
-                statusEl.className = "text-xs font-bold text-slate-400";
-                statusEl.textContent = "Belum Dijawab";
-                solutionCard.classList.add('hidden');
-            }
-
-            // Render option buttons
-            const container = document.getElementById('quiz-options-container');
+        function renderQuizOptions() {
+            const q = appState.quiz.currentQuestion;
+            const container = document.getElementById('quiz-active-options');
             container.innerHTML = '';
 
             q.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = getOptionButtonStyle(num, idx);
-                btn.innerHTML = opt;
-                btn.disabled = answered;
-                btn.onclick = () => { submitQuizAnswer(idx); };
+                btn.className = getQuizOptionStyle(idx);
+                btn.innerHTML = formatNumberGrouping(opt);
+                btn.disabled = appState.quiz.answered;
+                btn.onclick = () => submitQuizDynamicAnswer(idx);
                 container.appendChild(btn);
             });
         }
 
-        function getOptionButtonStyle(qNum, optIdx) {
-            const answered = appState.quizAnswers[qNum] !== undefined;
-            const baseClass = "py-4 px-3 border-2 text-center text-lg font-black rounded-2xl transition duration-150 bounce-active w-full";
+        function getQuizOptionStyle(optIdx) {
+            const answered = appState.quiz.answered;
+            const baseClass = "py-4 px-3 border-2 text-center text-xl font-black rounded-2xl transition duration-150 w-full ";
 
             if (answered) {
-                const chosenIdx = appState.quizAnswers[qNum];
-                const correctIdx = QUIZ_ITEMS[qNum-1].correctIdx;
+                const chosen = appState.quiz.chosenIdx;
+                const correct = appState.quiz.currentQuestion.correctIdx;
 
-                if (optIdx === correctIdx) {
-                    return `${baseClass} bg-emerald-500 border-emerald-700 text-white`;
+                if (optIdx === correct) {
+                    return baseClass + "bg-emerald-500 border-emerald-700 text-white scale-102 shadow-md";
                 }
-                if (optIdx === chosenIdx) {
-                    return `${baseClass} bg-rose-500 border-rose-700 text-white`;
+                if (optIdx === chosen) {
+                    return baseClass + "bg-rose-500 border-rose-700 text-white";
                 }
-                return `${baseClass} bg-slate-50 border-slate-200 text-slate-300`;
+                return baseClass + "bg-slate-50 border-slate-200 text-slate-300";
             }
 
-            return `${baseClass} bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-900`;
+            return baseClass + "bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-900 shadow-sm";
         }
 
-        function submitQuizAnswer(idx) {
-            const q = QUIZ_ITEMS[activeQuizNum - 1];
-            appState.quizAnswers[activeQuizNum] = idx;
+        function submitQuizDynamicAnswer(idx) {
+            if (appState.quiz.answered) return;
 
+            appState.quiz.answered = true;
+            appState.quiz.chosenIdx = idx;
+
+            const q = appState.quiz.currentQuestion;
             const isCorrect = idx === q.correctIdx;
+
+            appState.quiz.sessionTotal++;
+
             if (isCorrect) {
                 playSfx('correct');
+                appState.quiz.sessionCorrect++;
                 appState.quizScores += 10;
+                document.getElementById('quiz-active-status').textContent = "Jawabanmu Benar! 🎉 (+10 ⭐)";
+                document.getElementById('quiz-active-status').className = "text-xs font-black text-emerald-600";
             } else {
                 playSfx('wrong');
+                document.getElementById('quiz-active-status').textContent = "Oops, Belum Tepat! 😢";
+                document.getElementById('quiz-active-status').className = "text-xs font-black text-rose-600";
             }
 
             // Save Progress locally
-            localStorage.setItem('smp_math_quiz_answers', JSON.stringify(appState.quizAnswers));
             localStorage.setItem('smp_math_quiz_score', appState.quizScores);
 
-            // Reload Layout & Question to show results
-            renderQuizLayout();
-            loadQuestion(activeQuizNum);
+            // Compile Worked Solution
+            compileWorkedSolution();
+
+            // Refresh UI Options & Header Score
+            renderQuizOptions();
+            updateScoreDisplay();
+            document.getElementById('quiz-session-stats').textContent = `${appState.quiz.sessionCorrect} / ${appState.quiz.sessionTotal} Dijawab`;
         }
 
-        function updateScoreDisplay() {
-            const score = appState.quizScores;
-            document.getElementById('header-stars').textContent = `${score} / 110 ⭐`;
+        function compileWorkedSolution() {
+            const q = appState.quiz.currentQuestion;
+            const cat = appState.quiz.category;
+            const solContainer = document.getElementById('quiz-active-solution-text');
             
-            // Progress Bar text
-            const answeredCount = Object.keys(appState.quizAnswers).length;
-            document.getElementById('quiz-progress-text').textContent = `${answeredCount} / 11 Soal`;
+            let html = "";
+
+            if (cat === 'tambah') {
+                html = `
+                    <p class="font-semibold text-slate-800">Langkah-langkah Penjumlahan Bersusun:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                        <li>Luruskan digit satuan dari angka <b>${q.numA}</b> dan <b>${q.numB}</b>.</li>
+                        <li>Jumlahkan dari kolom paling kanan (Satuan): 
+                            <b>${q.numA % 10} + ${q.numB % 10} = ${(q.numA % 10) + (q.numB % 10)}</b>. Jika hasilnya &ge; 10, simpan nilai puluhannya ke kolom kiri.
+                        </li>
+                        <li>Lanjutkan penjumlahan kolom-kolom berikutnya secara bertahap ke kiri dengan menyertakan angka simpanannya.</li>
+                        <li class="font-bold text-emerald-700">Hasil Akhir: ${q.numA} + ${q.numB} = ${q.ans}</li>
+                    </ul>
+                `;
+            } 
+            else if (cat === 'kurang') {
+                html = `
+                    <p class="font-semibold text-slate-800">Langkah-langkah Pengurangan Bersusun:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                        <li>Luruskan nilai tempat angka <b>${q.numA}</b> (Atas) dan <b>${q.numB}</b> (Bawah).</li>
+                        <li>Lakukan pengurangan kolom demi kolom mulai dari kanan ke kiri.</li>
+                        <li>Jika digit atas lebih kecil daripada bawah pada kolom yang sama, <b>pinjam 1 puluhan</b> dari kolom sebelahnya agar nilainya bertambah 10.</li>
+                        <li class="font-bold text-emerald-700">Hasil Akhir: ${q.numA} − ${q.numB} = ${q.ans}</li>
+                    </ul>
+                `;
+            } 
+            else if (cat === 'kali') {
+                html = `
+                    <p class="font-semibold text-slate-800">Langkah-langkah Perkalian Bersusun:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                        <li>Kalikan setiap digit angka atas <b>${q.numA}</b> dengan angka satuan pengali bawah <b>(${q.numB % 10})</b>. Tulis di baris pertama.</li>
+                        ${q.numB >= 10 ? `<li>Kalikan seluruh digit angka atas <b>${q.numA}</b> dengan angka puluhan pengali bawah <b>(${Math.floor(q.numB / 10)})</b>. Tulis di baris kedua dengan digeser 1 kolom ke kiri (bisa ditambah angka bantuan 0 di ujung kanan).</li>` : ''}
+                        <li>Jumlahkan hasil tumpukan baris perkalian tersebut secara vertikal.</li>
+                        <li class="font-bold text-emerald-700">Hasil Akhir: ${q.numA} × ${q.numB} = ${q.ans}</li>
+                    </ul>
+                `;
+            } 
+            else if (cat === 'bagi') {
+                html = `
+                    <p class="font-semibold text-slate-800">Alur Kerja Porogapit (Pembagian Bersusun):</p>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                        <li>Tulis angka <b>${q.numA}</b> di dalam kurung dan <b>${q.numB}</b> di luar.</li>
+                        <li><b>Bagi</b> angka terdepan dari kiri dengan ${q.numB}, lalu tulis hasilnya di atas.</li>
+                        <li><b>Kali</b> hasil atas tersebut dengan pembagi ${q.numB}, tulis di bawah angka tadi lalu lakukan <b>Kurang</b> secara vertikal.</li>
+                        <li><b>Turunkan</b> digit berikutnya dari angka dalam kurung, lalu ulangi siklus tersebut sampai sisa pengurangannya habis bernilai 0.</li>
+                        <li class="font-bold text-emerald-700">Hasil Akhir: ${q.numA} ÷ ${q.numB} = ${q.ans}</li>
+                    </ul>
+                `;
+            }
+
+            solContainer.innerHTML = html;
+            document.getElementById('quiz-active-solution-card').classList.remove('hidden');
         }
 
-        function resetEntireQuiz() {
-            if (confirm("Apakah kamu yakin ingin mengulang seluruh kuis dari awal?")) {
+        function formatNumberGrouping(num) {
+            // Add thousands separator for easy reading
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function resetQuizStats() {
+            if (confirm("Apakah kamu yakin ingin mereset statistik sesi latihan ini?")) {
                 playSfx('click');
-                appState.quizAnswers = {};
-                appState.quizScores = 0;
-                localStorage.removeItem('smp_math_quiz_answers');
-                localStorage.removeItem('smp_math_quiz_score');
-                
-                activeQuizNum = 1;
-                renderQuizLayout();
-                loadQuestion(1);
+                appState.quiz.sessionCorrect = 0;
+                appState.quiz.sessionTotal = 0;
+                document.getElementById('quiz-session-stats').textContent = "0 / 0 Dijawab";
+                generateNextQuizQuestion();
             }
         }
 
-        // --- LOAD INITIAL DATA ---
-        function loadSavedProgress() {
-            const savedAnswers = localStorage.getItem('smp_math_quiz_answers');
-            const savedScore = localStorage.getItem('smp_math_quiz_score');
-            
-            if (savedAnswers) {
-                try {
-                    appState.quizAnswers = JSON.parse(savedAnswers);
-                    appState.quizScores = parseInt(savedScore) || 0;
-                } catch (e) {
-                    appState.quizAnswers = {};
-                    appState.quizScores = 0;
-                }
-            }
+
+        // ================= GENERAL HELPERS & SCORE UPGRADE =================
+        function updateScoreDisplay() {
+            document.getElementById('header-stars').textContent = `${appState.quizScores} ⭐`;
         }
 
         // --- WINDOW LOAD INITIALIZER ---
