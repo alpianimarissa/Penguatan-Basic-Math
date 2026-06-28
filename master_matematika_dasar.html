@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif Matematika SMP</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@400;600;700;900&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .font-kids {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Line through animation for borrowed numbers */
+        .borrowed-cross {
+            position: relative;
+        }
+        .borrowed-cross::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 3px;
+            background-color: #ef4444;
+            transform: rotate(-15deg);
+        }
+
+        .step-highlight {
+            animation: pulseBg 1.5s infinite;
+        }
+
+        @keyframes pulseBg {
+            0%, 100% { background-color: rgba(254, 243, 199, 1); }
+            50% { background-color: rgba(253, 230, 138, 1); }
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- TOP HEADER -->
+    <header class="bg-indigo-600 border-b-4 border-indigo-800 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🚀</span>
+                <div>
+                    <h1 class="font-kids text-2xl font-black tracking-wide">Master Matematika Dasar</h1>
+                    <p class="text-xs text-indigo-200">Program Pemulihan & Penguatan Berhitung Anak SMP</p>
+                </div>
+            </div>
+            <!-- Progress / Achievements -->
+            <div class="flex items-center space-x-3 bg-indigo-700 px-4 py-1.5 rounded-full border border-indigo-500">
+                <span class="text-amber-300 font-bold">⭐ Skor Kuis:</span>
+                <span id="header-stars" class="font-black text-white font-kids">0 / 110</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[72px] z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto flex overflow-x-auto justify-start md:justify-center p-2 gap-2 no-scrollbar">
+            <button onclick="switchTab('intro')" id="tab-intro" class="nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap bg-indigo-50 text-indigo-700 border-2 border-indigo-200">
+                👋 Selamat Datang
+            </button>
+            <button onclick="switchTab('bab1')" id="tab-bab1" class="nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+                ➕ Bab 1: Penjumlahan & Pengurangan Bersusun
+            </button>
+            <button onclick="switchTab('bab2')" id="tab-bab2" class="nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+                ✖️ Bab 2: Perkalian Bersusun
+            </button>
+            <button onclick="switchTab('bab3')" id="tab-bab3" class="nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+                ➗ Bab 3: Porogapit
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+                📝 Bab 4: Kuis Mandiri
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6">
+        
+        <!-- ================= TAB: INTRODUCTION ================= -->
+        <section id="sec-intro" class="tab-content block space-y-6">
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none text-9xl">📐</div>
+                <div class="max-w-2xl space-y-4">
+                    <span class="bg-indigo-400/50 text-white font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Modul Pemulihan</span>
+                    <h2 class="text-3xl md:text-5xl font-black font-kids leading-tight">Matematika Tidak Sulit, Kamu Hanya Butuh Pola!</h2>
+                    <p class="text-indigo-100 text-sm md:text-base leading-relaxed">
+                        Pernah merasa bingung dengan hitungan bersusun negatif, perkalian angka ratusan, atau pembagian porogapit? Jangan khawatir! Modul interaktif ini dirancang khusus untuk memulihkan pemahaman dasarmu secara visual, presisi, dan terarah.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('bab1')" class="bg-white text-indigo-700 hover:bg-indigo-50 font-black px-6 py-3 rounded-2xl shadow-md transition transform active:scale-95">
+                            Mulai Belajar Sekarang 🚀
+                        </button>
+                        <button onclick="switchTab('quiz')" class="bg-indigo-700/40 text-white hover:bg-indigo-700/60 border border-indigo-400 font-bold px-6 py-3 rounded-2xl transition">
+                            Uji Kemampuanmu 🎯
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Map -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-start space-x-4">
+                    <span class="text-3xl p-3 bg-red-100 rounded-2xl">➕</span>
+                    <div class="space-y-1">
+                        <h3 class="font-black text-slate-800 text-lg font-kids">Penjumlahan & Pengurangan Bersusun</h3>
+                        <p class="text-slate-500 text-xs">Pahami teknik menyimpan (carry) dan meminjam (borrow) dari angka puluhan hingga ribuan secara presisi.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-start space-x-4">
+                    <span class="text-3xl p-3 bg-amber-100 rounded-2xl">✖️</span>
+                    <div class="space-y-1">
+                        <h3 class="font-black text-slate-800 text-lg font-kids">Perkalian Bersusun</h3>
+                        <p class="text-slate-500 text-xs">Pelajari alur baris pertama, penyimpanan angka, dan pergeseran baris kedua pada tabel grid yang rapi.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-start space-x-4">
+                    <span class="text-3xl p-3 bg-emerald-100 rounded-2xl">➗</span>
+                    <div class="space-y-1">
+                        <h3 class="font-black text-slate-800 text-lg font-kids">Porogapit (Pembagian)</h3>
+                        <p class="text-slate-500 text-xs">Gunakan simulator visual bersusun yang presisi dengan siklus: Bagi, Kali, Kurang, dan Turunkan.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB: BAB 1 (BERSUSUN PENJUMLAHAN & PENGURANGAN) ================= -->
+        <section id="sec-bab1" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-3xl font-black text-slate-800 font-kids">➕ Bab 1: Penjumlahan & Pengurangan Bersusun (Puluhan - Ribuan)</h2>
+                <p class="text-slate-500 text-sm">Gunakan mesin hitung bersusun di bawah ini untuk melihat bagaimana angka disimpan (carry) atau dipinjam (borrow).</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Interactive Vertical Math Simulator -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-6">
+                    <div class="text-center">
+                        <h3 class="font-black text-slate-700 text-lg font-kids">🧮 Mesin Penjumlah & Pengurang Bersusun</h3>
+                        <p class="text-xs text-slate-400">Pilih mode, masukkan angka sesukamu, lalu jalankan animasi per langkah!</p>
+                    </div>
+
+                    <!-- Simulator Control Panel -->
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Angka Atas (A)</label>
+                            <input type="number" id="vsim-a" min="10" max="9999" value="1425" class="w-full px-3 py-2 border rounded-lg font-black text-indigo-900" onchange="resetVsim()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Angka Bawah (B)</label>
+                            <input type="number" id="vsim-b" min="10" max="9999" value="867" class="w-full px-3 py-2 border rounded-lg font-black text-indigo-900" onchange="resetVsim()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Operasi</label>
+                            <select id="vsim-op" class="w-full px-3 py-2 border rounded-lg font-black text-indigo-900" onchange="resetVsim()">
+                                <option value="+">Tambah (+)</option>
+                                <option value="-">Kurang (-)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Presets buttons -->
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button onclick="loadVsimPreset(85, 47, '+')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Puluhan (+)</button>
+                        <button onclick="loadVsimPreset(72, 38, '-')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Puluhan (-)</button>
+                        <button onclick="loadVsimPreset(456, 289, '+')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ratusan (+)</button>
+                        <button onclick="loadVsimPreset(523, 167, '-')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ratusan (-)</button>
+                        <button onclick="loadVsimPreset(4234, 1876, '+')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ribuan (+)</button>
+                        <button onclick="loadVsimPreset(3002, 1425, '-')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ribuan (-)</button>
+                    </div>
+
+                    <!-- Visual Board -->
+                    <div class="bg-slate-900 text-white rounded-2xl p-6 min-h-[250px] flex flex-col justify-between items-center relative overflow-hidden shadow-inner">
+                        <span class="absolute top-2 right-2 text-[10px] uppercase font-bold text-slate-500">Papan Simulasi Bersusun</span>
+                        
+                        <div id="vsim-display-container" class="my-auto font-mono text-3xl md:text-4xl tracking-widest text-right space-y-2">
+                            <!-- Dynamically updated layout -->
+                        </div>
+
+                        <!-- Stepper controls -->
+                        <div class="w-full flex justify-between items-center mt-4 pt-4 border-t border-slate-800">
+                            <button onclick="changeVsimStep(-1)" id="btn-vsim-prev" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition">Kembali</button>
+                            <span id="vsim-step-text" class="text-xs font-bold text-indigo-400">Langkah 1/5</span>
+                            <button onclick="changeVsimStep(1)" id="btn-vsim-next" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition">Lanjut</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step Description Card -->
+                <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <h3 class="font-black text-slate-700 text-lg font-kids">💡 Cara Kerja Langkah Ini:</h3>
+                        <div id="vsim-explanation" class="bg-indigo-50 border border-indigo-100 rounded-xl p-5 text-sm text-slate-700 min-h-[180px] flex flex-col justify-center leading-relaxed">
+                            Pilih angka di samping lalu tekan tombol "Lanjut" untuk memulai simulasi hitung bersusun.
+                        </div>
+                    </div>
+
+                    <!-- Pro-tips -->
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
+                        <h4 class="font-bold text-amber-900 text-xs uppercase">📌 Aturan Emas Bersusun:</h4>
+                        <ul class="text-xs text-amber-800 space-y-1 list-disc pl-4">
+                            <li>Selalu luruskan posisi angka mulai dari kanan (Satuan), lalu Puluhan, Ratusan, dan Ribuan.</li>
+                            <li>Pada <b>Penjumlahan</b>: jika hasil per kolom &ge; 10, simpan puluhannya di kolom sebelah kiri.</li>
+                            <li>Pada <b>Pengurangan</b>: jika angka atas lebih kecil dari angka bawah, pinjam 1 angka (bernilai 10) dari kolom kiri.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB: BAB 2 (PERKALIAN BERSUSUN - DINAMIS) ================= -->
+        <section id="sec-bab2" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-3xl font-black text-slate-800 font-kids">✖️ Bab 2: Langkah demi Langkah Perkalian Bersusun</h2>
+                <p class="text-slate-500 text-sm">Gunakan simulator perkalian dinamis ini untuk melihat alur pengerjaan baris demi baris, lengkap dengan penyimpanannya.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Visual Board & Controls -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-6 flex flex-col justify-between min-h-[400px]">
+                    <div class="text-center">
+                        <span class="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded text-xs uppercase font-kids">Simulator Perkalian Dinamis</span>
+                    </div>
+
+                    <!-- Input Panel -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Angka Atas (A) [Maks 3 Digit]</label>
+                            <input type="number" id="mult-input-a" min="10" max="999" value="145" class="w-full px-3 py-2 border rounded-lg font-black text-indigo-900" onchange="resetMultSimulator()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Angka Bawah (B) [Maks 2 Digit]</label>
+                            <input type="number" id="mult-input-b" min="1" max="99" value="23" class="w-full px-3 py-2 border rounded-lg font-black text-indigo-900" onchange="resetMultSimulator()">
+                        </div>
+                    </div>
+
+                    <!-- Presets Perkalian -->
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button onclick="loadMultPreset(45, 6)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Puluhan × Satuan</button>
+                        <button onclick="loadMultPreset(125, 8)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ratusan × Satuan</button>
+                        <button onclick="loadMultPreset(34, 12)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Puluhan × Puluhan</button>
+                        <button onclick="loadMultPreset(245, 16)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ratusan × Puluhan</button>
+                    </div>
+
+                    <!-- Visual Board Representation -->
+                    <div class="my-auto flex justify-center items-center py-6">
+                        <div id="mult-board" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 shadow-inner w-full overflow-x-auto flex justify-center">
+                            <!-- Structured table layout updated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Playback Controls -->
+                    <div class="flex justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200">
+                        <button onclick="changeMultStep(-1)" id="btn-mult-prev" class="px-4 py-2 bg-white text-slate-700 hover:bg-slate-50 border border-slate-300 font-bold rounded-lg text-xs transition">
+                            ⬅️ Kembali
+                        </button>
+                        <span class="text-xs font-black text-slate-500 uppercase font-kids">Langkah: <span id="mult-step-idx">1</span> / <span id="mult-step-total">1</span></span>
+                        <button onclick="changeMultStep(1)" id="btn-mult-next" class="px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 font-bold rounded-lg text-xs transition shadow-sm">
+                            Lanjut ➡️
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Explanation & Checklist Side Panel -->
+                <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between min-h-[400px] space-y-4">
+                    <div class="space-y-4">
+                        <h3 class="font-black text-slate-700 text-lg font-kids">💡 Cara Membaca & Menyimpan</h3>
+                        <div id="mult-explanation-card" class="bg-amber-50 border border-amber-200 rounded-2xl p-5 min-h-[180px] flex flex-col justify-center text-slate-700 space-y-3">
+                            <!-- Loaded via js -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Tracking Checklist -->
+                    <div class="border-t border-slate-100 pt-4 space-y-2">
+                        <span class="text-xs font-black text-slate-400 uppercase tracking-wider block">Target Pembelajaran Perkalian:</span>
+                        <div class="grid grid-cols-1 gap-2 text-xs font-bold" id="mult-checklist">
+                            <!-- Items injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB: BAB 3 (POROGAPIT / PEMBAGIAN - DINAMIS) ================= -->
+        <section id="sec-bab3" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-3xl font-black text-slate-800 font-kids">➗ Bab 3: Pembagian Bersusun (Porogapit)</h2>
+                <p class="text-slate-500 text-sm">Mari kita visualisasikan langkah demi langkah pengerjaan porogapit secara dinamis sesuai dengan angka pilihanmu.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Visual Board and Controllers -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between min-h-[420px] space-y-4">
+                    <div class="text-center">
+                        <span class="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded text-xs uppercase font-kids">Alur Pembagian Porogapit Dinamis</span>
+                    </div>
+
+                    <!-- Input Panel -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Angka Di Dalam (Dividen) [Maks 4 Digit]</label>
+                            <input type="number" id="div-input-a" min="10" max="9999" value="756" class="w-full px-3 py-2 border rounded-lg font-black text-emerald-900" onchange="resetDivSimulator()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Angka Pembagi (Divisor) [Maks 9]</label>
+                            <input type="number" id="div-input-b" min="2" max="9" value="6" class="w-full px-3 py-2 border rounded-lg font-black text-emerald-900" onchange="resetDivSimulator()">
+                        </div>
+                    </div>
+
+                    <!-- Presets Pembagian -->
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button onclick="loadDivPreset(72, 3)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Puluhan ÷ Satuan</button>
+                        <button onclick="loadDivPreset(512, 4)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ratusan ÷ Satuan</button>
+                        <button onclick="loadDivPreset(1425, 5)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 transition">Ribuan ÷ Satuan</button>
+                    </div>
+
+                    <!-- Division Board Layout -->
+                    <div class="my-auto flex justify-center items-center py-6">
+                        <div id="div-board" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 overflow-x-auto w-full flex justify-center">
+                            <!-- Dynamic porogapit grids -->
+                        </div>
+                    </div>
+
+                    <!-- Playback Controls -->
+                    <div class="flex justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200">
+                        <button onclick="changeDivStep(-1)" id="btn-div-prev" class="px-4 py-2 bg-white text-slate-700 hover:bg-slate-50 border border-slate-300 font-bold rounded-lg text-xs transition">
+                            ⬅️ Kembali
+                        </button>
+                        <span class="text-xs font-black text-slate-500 uppercase font-kids">Langkah: <span id="div-step-idx">1</span> / <span id="div-step-total">1</span></span>
+                        <button onclick="changeDivStep(1)" id="btn-div-next" class="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-700 font-bold rounded-lg text-xs transition shadow-sm">
+                            Lanjut ➡️
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Explanation Panel -->
+                <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <h3 class="font-black text-slate-700 text-lg font-kids">🔁 Urutan Gerakan Porogapit:</h3>
+                        
+                        <!-- 4 Pillars of Division -->
+                        <div class="grid grid-cols-4 gap-2 text-center text-xs font-black uppercase">
+                            <div id="div-pillar-bagi" class="p-2 rounded-xl transition-all duration-300 border-2">Bagi ➗</div>
+                            <div id="div-pillar-kali" class="p-2 rounded-xl transition-all duration-300 border-2">Kali ✖️</div>
+                            <div id="div-pillar-kurang" class="p-2 rounded-xl transition-all duration-300 border-2">Kurang ➖</div>
+                            <div id="div-pillar-turun" class="p-2 rounded-xl transition-all duration-300 border-2">Turun ⬇️</div>
+                        </div>
+
+                        <!-- Text explanation box -->
+                        <div id="div-explanation-card" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 min-h-[160px] flex flex-col justify-center text-slate-700 space-y-2">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Helpful tip -->
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs text-amber-800 space-y-1">
+                        <span class="font-black uppercase tracking-wider block">🚨 Aturan Emas Nol (0) Porogapit:</span>
+                        <p class="leading-relaxed text-[11px]">
+                            Jika di tengah jalan kamu membagi suatu angka lalu <b>tidak bisa dibagi sama sekali</b>, wajib menulis angka <b>0</b> di atas terlebih dahulu, barulah kamu boleh menurunkan angka berikutnya!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB: THE REINFORCEMENT QUIZ ================= -->
+        <section id="sec-quiz" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-800 font-kids">📝 Bab 4: Lembar Latihan Mandiri Interaktif</h2>
+                    <p class="text-slate-500 text-sm">Selesaikan 11 soal latihan di bawah ini untuk meraih lencana kejuaraan matematika!</p>
+                </div>
+                <!-- Mini Progress Tracker -->
+                <div class="flex items-center space-x-2 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-2 self-start sm:self-auto">
+                    <span class="text-xs text-indigo-700 font-bold">Progress Kuis:</span>
+                    <span id="quiz-progress-text" class="font-black text-indigo-900 font-kids">0 / 11 Soal</span>
+                </div>
+            </div>
+
+            <!-- Quiz Layout Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Question Bank Nav -->
+                <div class="lg:col-span-4 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-4">
+                    <span class="text-xs font-black text-slate-400 uppercase tracking-wider block">Navigasi Soal:</span>
+                    
+                    <!-- Bab Groupings -->
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">Bab 1: Bilangan Bulat</span>
+                            <div class="grid grid-cols-5 gap-1.5" id="nav-group-bab1">
+                                <!-- Generated buttons for Q1-Q5 -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">Bab 2: Perkalian Bersusun</span>
+                            <div class="grid grid-cols-5 gap-1.5" id="nav-group-bab2">
+                                <!-- Generated buttons for Q6-Q8 -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">Bab 3: Porogapit</span>
+                            <div class="grid grid-cols-5 gap-1.5" id="nav-group-bab3">
+                                <!-- Generated for Q9-Q11 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset Quiz Button -->
+                    <button onclick="resetEntireQuiz()" class="w-full mt-4 py-2 border border-slate-200 text-slate-500 hover:bg-slate-50 text-xs font-bold rounded-lg transition">
+                        Reset Hasil Kuis 🔄
+                    </button>
+                </div>
+
+                <!-- Right: Active Question Frame -->
+                <div class="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-md flex flex-col justify-between min-h-[380px]">
+                    <div class="space-y-6">
+                        <!-- Heading of Question Card -->
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                            <span id="quiz-badge-category" class="px-2.5 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-black rounded-lg uppercase tracking-wide">
+                                Kategori
+                            </span>
+                            <span id="quiz-item-status" class="text-xs font-bold text-slate-400">Belum Dijawab</span>
+                        </div>
+
+                        <!-- Question Prompt -->
+                        <div class="space-y-3">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pertanyaan ke-<span id="quiz-display-num">1</span>:</span>
+                            <h3 id="quiz-prompt-text" class="text-2xl md:text-3xl font-black text-slate-800 font-kids leading-relaxed">
+                                Loading question...
+                            </h3>
+                        </div>
+
+                        <!-- Interactive Answers Selection -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2" id="quiz-options-container">
+                            <!-- Injected button options -->
+                        </div>
+                    </div>
+
+                    <!-- Interactive solution step-by-step display upon submission -->
+                    <div id="quiz-solution-card" class="hidden mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2 text-slate-700 text-sm">
+                        <span class="font-black text-amber-900 font-kids flex items-center gap-1">💡 Pembahasan Langkah Kerja:</span>
+                        <p id="quiz-solution-text" class="leading-relaxed text-xs">
+                            Lorem ipsum dolor sit amet...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t-4 border-slate-950 text-slate-400 text-center text-xs p-4 mt-8">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <p>© 2026 Modul Penguatan & Pemulihan Matematika Dasar SMP. Dirancang interaktif agar matematika ramah dan mudah dipelajari.</p>
+            <div class="flex space-x-3">
+                <span class="opacity-75">Made with 💚 in Indonesia</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS State and Interactions -->
+    <script>
+        // --- SOUND SYNTHESIZER ---
+        let audioCtx = null;
+        function playSfx(type) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'magic') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.08);
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.16);
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.24);
+                    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.35);
+                } else if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                }
+            } catch (e) {
+                console.log("Audio API issue or not supported.");
+            }
+        }
+
+        // --- GLOBAL APP STATE ---
+        let appState = {
+            activeTab: 'intro',
+            vsim: {
+                a: 1425,
+                b: 867,
+                op: '+',
+                currentStep: 0,
+                steps: []
+            },
+            mult: {
+                a: 145,
+                b: 23,
+                currentStep: 0,
+                steps: []
+            },
+            div: {
+                a: 756,
+                b: 6,
+                currentStep: 0,
+                steps: []
+            },
+            quizAnswers: {}, // Stores index of selected answers by question (1-11)
+            quizScores: 0 // stars accumulated
+        };
+
+        // --- TAB NAVIGATION ---
+        function switchTab(tabId) {
+            playSfx('click');
+            
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show active tab
+            document.getElementById('sec-' + tabId).classList.remove('hidden');
+
+            // Reset tab button states
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap text-slate-600 hover:bg-slate-50 border-2 border-transparent";
+            });
+
+            // Set active class
+            document.getElementById('tab-' + tabId).className = "nav-btn px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap bg-indigo-50 text-indigo-700 border-2 border-indigo-200";
+            
+            appState.activeTab = tabId;
+
+            // Custom tab trigger setup
+            if (tabId === 'bab1') {
+                resetVsim();
+            } else if (tabId === 'bab2') {
+                resetMultSimulator();
+            } else if (tabId === 'bab3') {
+                resetDivSimulator();
+            } else if (tabId === 'quiz') {
+                renderQuizLayout();
+                loadQuestion(activeQuizNum);
+            }
+        }
+
+
+        // ================= BAB 1: PENJUMLAHAN & PENGURANGAN BERSUSUN SIMULATOR =================
+        function loadVsimPreset(a, b, op) {
+            document.getElementById('vsim-a').value = a;
+            document.getElementById('vsim-b').value = b;
+            document.getElementById('vsim-op').value = op;
+            resetVsim();
+        }
+
+        function resetVsim() {
+            let valA = parseInt(document.getElementById('vsim-a').value) || 0;
+            let valB = parseInt(document.getElementById('vsim-b').value) || 0;
+            const op = document.getElementById('vsim-op').value;
+
+            // Simple validation
+            if (valA < valB && op === '-') {
+                // Swap so A is always larger for simplicity in elementary borrowing demos
+                let temp = valA;
+                valA = valB;
+                valB = temp;
+                document.getElementById('vsim-a').value = valA;
+                document.getElementById('vsim-b').value = valB;
+            }
+
+            appState.vsim.a = valA;
+            appState.vsim.b = valB;
+            appState.vsim.op = op;
+            appState.vsim.currentStep = 0;
+            
+            generateVsimSteps();
+            renderVsim();
+        }
+
+        function generateVsimSteps() {
+            const steps = [];
+            const strA = appState.vsim.a.toString();
+            const strB = appState.vsim.b.toString();
+            const op = appState.vsim.op;
+
+            // Padded versions to align right
+            const maxLen = Math.max(strA.length, strB.length);
+            const padA = strA.padStart(maxLen, ' ');
+            const padB = strB.padStart(maxLen, ' ');
+
+            // Initial Step
+            steps.push({
+                type: 'init',
+                explanation: `<b>Langkah Awal: Penyelarasan Kolom</b><br>Tulis kedua angka secara bertumpuk. Pastikan digit paling kanan (Satuan) lurus sejajar ke bawah.`,
+                carries: Array(maxLen).fill(' '),
+                borrows: Array(maxLen).fill(' '), // borrow markers
+                activeCol: -1,
+                currentRes: Array(maxLen).fill(' ')
+            });
+
+            if (op === '+') {
+                // ADDITION
+                let carry = 0;
+                let carries = Array(maxLen).fill(' ');
+                let results = Array(maxLen).fill(' ');
+
+                // Loop from right to left
+                for (let i = maxLen - 1; i >= 0; i--) {
+                    const digA = parseInt(padA[i]) || 0;
+                    const digB = parseInt(padB[i]) || 0;
+                    const sum = digA + digB + carry;
+                    const writeDigit = sum % 10;
+                    const prevCarry = carry;
+                    carry = Math.floor(sum / 10);
+
+                    // Record carry indicator for next column
+                    let carryStr = "";
+                    if (carry > 0 && i > 0) {
+                        carries[i - 1] = '1';
+                        carryStr = ` dan simpan puluhan <b>1</b> di atas kepala kolom kiri.`;
+                    }
+
+                    results[i] = writeDigit.toString();
+
+                    let stepExplanation = `<b>Kolom Ke-${maxLen - i} (Kanan ke Kiri):</b><br>`;
+                    if (prevCarry > 0) {
+                        stepExplanation += `Jumlahkan simpanan <b>1</b> + angka atas (${digA}) + angka bawah (${digB}) = <b>${sum}</b>.<br>`;
+                    } else {
+                        stepExplanation += `Jumlahkan angka atas (${digA}) + angka bawah (${digB}) = <b>${sum}</b>.<br>`;
+                    }
+                    stepExplanation += `Tulis satuan <b>${writeDigit}</b> di bawah baris hasil${carryStr}`;
+
+                    steps.push({
+                        type: 'calc',
+                        explanation: stepExplanation,
+                        carries: [...carries],
+                        borrows: Array(maxLen).fill(' '),
+                        activeCol: i,
+                        currentRes: [...results]
+                    });
+                }
+
+                // If final carry remains
+                if (carry > 0) {
+                    let finalRes = [carry.toString(), ...results];
+                    steps.push({
+                        type: 'final',
+                        explanation: `<b>Langkah Akhir:</b><br>Karena masih ada angka simpanan <b>1</b> di kolom paling kiri, tulis angka <b>1</b> di bagian paling depan hasil.`,
+                        carries: [...carries],
+                        borrows: Array(maxLen).fill(' '),
+                        activeCol: -1,
+                        currentRes: finalRes
+                    });
+                }
+            } else {
+                // SUBTRACTION (With Borrowing check)
+                let borrows = Array(maxLen).fill(' ');
+                let results = Array(maxLen).fill(' ');
+                let arrA = padA.split('').map(x => x === ' ' ? 0 : parseInt(x));
+                let arrB = padB.split('').map(x => x === ' ' ? 0 : parseInt(x));
+
+                for (let i = maxLen - 1; i >= 0; i--) {
+                    let digA = arrA[i];
+                    let digB = arrB[i];
+
+                    let stepExplanation = `<b>Kolom Ke-${maxLen - i} (Kanan ke Kiri):</b><br>`;
+
+                    if (digA < digB) {
+                        // Need borrowing
+                        stepExplanation += `Karena angka atas (${digA}) lebih kecil daripada angka bawah (${digB}), kita harus <b>meminjam 1 puluhan (bernilai 10)</b> dari kolom sebelah kiri.<br>`;
+                        
+                        // Find next non-zero left neighbor to borrow from
+                        let borrowIdx = i - 1;
+                        while (borrowIdx >= 0 && arrA[borrowIdx] === 0) {
+                            borrowIdx--;
+                        }
+
+                        if (borrowIdx >= 0) {
+                            // Deduct from borrowed element
+                            arrA[borrowIdx]--;
+                            borrows[borrowIdx] = arrA[borrowIdx].toString();
+                            
+                            // Propagate borrowing through zeros if any
+                            for (let k = borrowIdx + 1; k < i; k++) {
+                                arrA[k] = 9;
+                                borrows[k] = '9';
+                            }
+                        }
+
+                        digA += 10;
+                        borrows[i] = digA.toString();
+                        const diff = digA - digB;
+                        results[i] = diff.toString();
+
+                        stepExplanation += `Sekarang, angka atas menjadi <b>${digA}</b>. Hitung: ${digA} − ${digB} = <b>${diff}</b>. Tulis hasil di bawah.`;
+                    } else {
+                        const diff = digA - digB;
+                        results[i] = diff.toString();
+                        stepExplanation += `Hitung pengurangan sederhana: ${digA} − ${digB} = <b>${diff}</b>. Tulis hasil di bawah.`;
+                    }
+
+                    steps.push({
+                        type: 'calc',
+                        explanation: stepExplanation,
+                        carries: Array(maxLen).fill(' '),
+                        borrows: [...borrows],
+                        activeCol: i,
+                        currentRes: [...results]
+                    });
+                }
+            }
+
+            appState.vsim.steps = steps;
+        }
+
+        function renderVsim() {
+            const step = appState.vsim.steps[appState.vsim.currentStep];
+            if (!step) return;
+
+            const maxLen = Math.max(appState.vsim.a.toString().length, appState.vsim.b.toString().length);
+            const strA = appState.vsim.a.toString().padStart(maxLen, ' ');
+            const strB = appState.vsim.b.toString().padStart(maxLen, ' ');
+
+            // Construct HTML Table-like structure for perfect alignment
+            let html = `<table class="mx-auto text-right font-mono text-3xl md:text-4xl text-white">`;
+
+            // Row 1: Carry / Borrow Indicator row
+            html += `<tr>`;
+            for (let i = 0; i < maxLen; i++) {
+                let carryVal = step.carries[i];
+                let borrowVal = step.borrows[i];
+                let cellClass = "w-10 h-10 text-center text-xs font-black ";
+
+                if (carryVal !== ' ' && carryVal !== undefined) {
+                    html += `<td class="${cellClass} text-emerald-400 bg-emerald-950/40 rounded-full border border-emerald-500/20">${carryVal}</td>`;
+                } else if (borrowVal !== ' ' && borrowVal !== undefined && parseInt(borrowVal) > 9) {
+                    html += `<td class="${cellClass} text-rose-400 bg-rose-950/40 rounded-full border border-rose-500/20">${borrowVal}</td>`;
+                } else {
+                    html += `<td class="w-10 h-10"></td>`;
+                }
+            }
+            html += `<td class="w-10"></td></tr>`; // empty column for operator alignment
+
+            // Row 2: Number A
+            html += `<tr>`;
+            for (let i = 0; i < maxLen; i++) {
+                let dig = strA[i];
+                let isBorrowed = step.borrows[i] !== ' ' && step.borrows[i] !== undefined && parseInt(step.borrows[i]) <= 9;
+                let isCurrent = step.activeCol === i;
+                let bgStyle = isCurrent ? "bg-indigo-900 border border-indigo-500 rounded" : "";
+                
+                if (isBorrowed) {
+                    // Show crossed out digit with borrow result above it (simulated)
+                    html += `<td class="w-10 h-12 text-center relative ${bgStyle}"><span class="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold text-rose-400">${step.borrows[i]}</span><span class="borrowed-cross opacity-40">${dig}</span></td>`;
+                } else {
+                    html += `<td class="w-10 h-12 text-center ${bgStyle}">${dig === ' ' ? '' : dig}</td>`;
+                }
+            }
+            html += `<td></td></tr>`;
+
+            // Row 3: Number B + Operator
+            html += `<tr>`;
+            for (let i = 0; i < maxLen; i++) {
+                let dig = strB[i];
+                let isCurrent = step.activeCol === i;
+                let bgStyle = isCurrent ? "bg-indigo-900 border border-indigo-500 rounded" : "";
+                html += `<td class="w-10 h-12 text-center ${bgStyle}">${dig === ' ' ? '' : dig}</td>`;
+            }
+            html += `<td class="w-10 h-12 text-center text-amber-500 font-bold">${appState.vsim.op}</td></tr>`;
+
+            // Row 4: Horizontal line
+            html += `<tr><td colspan="${maxLen + 1}" class="p-0"><hr class="border-t-4 border-slate-500 my-1"></td></tr>`;
+
+            // Row 5: Results row
+            html += `<tr>`;
+            // Check if final step expanded results array
+            const resLen = step.currentRes.length;
+            if (resLen > maxLen) {
+                // For final carry column
+                html += `<td class="w-10 h-12 text-center text-emerald-400 font-black">${step.currentRes[0]}</td>`;
+            }
+            for (let i = 0; i < maxLen; i++) {
+                let rDig = resLen > maxLen ? step.currentRes[i+1] : step.currentRes[i];
+                let isCurrent = step.activeCol === i;
+                let textClass = isCurrent ? "text-amber-300 font-black scale-110" : "text-white";
+                html += `<td class="w-10 h-12 text-center ${textClass}">${rDig === ' ' || rDig === undefined ? '' : rDig}</td>`;
+            }
+            html += `<td></td></tr>`;
+
+            html += `</table>`;
+
+            document.getElementById('vsim-display-container').innerHTML = html;
+            document.getElementById('vsim-explanation').innerHTML = `
+                <span class="text-xs font-bold text-indigo-500 uppercase block tracking-wider mb-2">Penjelasan Langkah:</span>
+                <p class="leading-relaxed text-indigo-950 font-semibold">${step.explanation}</p>
+            `;
+
+            // Update footer info
+            document.getElementById('vsim-step-text').textContent = `Langkah ${appState.vsim.currentStep + 1} / ${appState.vsim.steps.length}`;
+            document.getElementById('btn-vsim-prev').disabled = appState.vsim.currentStep === 0;
+            document.getElementById('btn-vsim-next').disabled = appState.vsim.currentStep === appState.vsim.steps.length - 1;
+        }
+
+        function changeVsimStep(delta) {
+            const nextIdx = appState.vsim.currentStep + delta;
+            if (nextIdx >= 0 && nextIdx < appState.vsim.steps.length) {
+                playSfx('click');
+                appState.vsim.currentStep = nextIdx;
+                renderVsim();
+            }
+        }
+
+
+        // ================= BAB 2: PERKALIAN BERSUSUN DINAMIS ENGINE =================
+        function loadMultPreset(a, b) {
+            document.getElementById('mult-input-a').value = a;
+            document.getElementById('mult-input-b').value = b;
+            resetMultSimulator();
+        }
+
+        function resetMultSimulator() {
+            let valA = parseInt(document.getElementById('mult-input-a').value) || 0;
+            let valB = parseInt(document.getElementById('mult-input-b').value) || 0;
+
+            // Restrict size for clean table presentation
+            if (valA > 999) { valA = 999; document.getElementById('mult-input-a').value = 999; }
+            if (valB > 99) { valB = 99; document.getElementById('mult-input-b').value = 99; }
+            if (valA < 1) { valA = 1; document.getElementById('mult-input-a').value = 1; }
+            if (valB < 1) { valB = 1; document.getElementById('mult-input-b').value = 1; }
+
+            appState.mult.a = valA;
+            appState.mult.b = valB;
+            appState.mult.currentStep = 0;
+
+            generateMultSteps();
+            renderMultStep(0);
+        }
+
+        function generateMultSteps() {
+            const steps = [];
+            const strA = appState.mult.a.toString();
+            const strB = appState.mult.b.toString();
+            const lenA = strA.length;
+            const lenB = strB.length;
+
+            const finalRes = appState.mult.a * appState.mult.b;
+
+            // Alignment step
+            steps.push({
+                type: 'align',
+                explanation: `<b>Langkah Awal: Pengaturan Posisi</b><br>Tulis bilangan atas <b>${appState.mult.a}</b> dan pengali <b>${appState.mult.b}</b> secara bertumpuk sejajar ke kanan (satuan lurus dengan satuan).`,
+                activeCells: [],
+                carries1: Array(lenA).fill(' '),
+                carries2: Array(lenA).fill(' '),
+                line1: Array(lenA + 1).fill(' '),
+                line2: Array(lenA + 2).fill(' '),
+                showTotal: false
+            });
+
+            // --- Multiplier 1 (Units of B) ---
+            const uB = parseInt(strB[lenB - 1]); // digit satuan dari B
+            let carry1 = 0;
+            let carries1 = Array(lenA).fill(' ');
+            let line1 = Array(lenA + 1).fill(' '); // stores computed digits
+
+            for (let i = lenA - 1; i >= 0; i--) {
+                const uA = parseInt(strA[i]);
+                const prod = uB * uA + carry1;
+                const writeDig = prod % 10;
+                const prevCarry = carry1;
+                carry1 = Math.floor(prod / 10);
+
+                // Save carry for next step representation
+                if (carry1 > 0 && i > 0) {
+                    carries1[i - 1] = carry1.toString();
+                }
+
+                line1[i + 1] = writeDig.toString();
+
+                let exp = `<b>Mengalikan dengan Satuan (${uB})</b>:<br>`;
+                exp += `Kalikan ${uB} × ${uA} = ${uB * uA}. `;
+                if (prevCarry > 0) exp += `Tambahkan angka simpanan sebelumnya: + ${prevCarry} = <b>${prod}</b>. `;
+                exp += `<br>Tulis angka satuan <b>${writeDig}</b> di bawah. `;
+                if (carry1 > 0) {
+                    if (i > 0) exp += `Simpan puluhannya (<b>${carry1}</b>) di kolom kiri.`;
+                    else {
+                        line1[0] = carry1.toString(); // final carry wrote at front
+                        exp += `Tulis sisa angka simpanan <b>${carry1}</b> langsung di depan.`;
+                    }
+                }
+
+                steps.push({
+                    type: 'mult1',
+                    explanation: exp,
+                    activeCells: [`t-${i}`, `b-${lenB-1}`, `line1-${i+1}`],
+                    carries1: [...carries1],
+                    carries2: Array(lenA).fill(' '),
+                    line1: [...line1],
+                    line2: Array(lenA + 2).fill(' '),
+                    showTotal: false
+                });
+            }
+
+            // --- Multiplier 2 (Tens of B, if B has 2 digits) ---
+            let line2 = Array(lenA + 2).fill(' ');
+            if (lenB === 2) {
+                const tB = parseInt(strB[0]); // digit puluhan dari B
+                
+                // Gold Rule Step: Shift to left, add placeholder '0' or space helper
+                line2[lenA + 1] = '0';
+                steps.push({
+                    type: 'shift',
+                    explanation: `<b>Langkah Emas: Geser Satu Langkah!</b><br>Kita mulai mengalikan dengan angka puluhan <b>${tB}</b>.<br>Karena ini pengali puluhan, hasilnya harus ditulis bergeser satu langkah ke kiri. Berikan angka bantuan <b>0</b> di bagian ujung kanan baris kedua.`,
+                    activeCells: [`line2-${lenA+1}`],
+                    carries1: [...carries1],
+                    carries2: Array(lenA).fill(' '),
+                    line1: [...line1],
+                    line2: [...line2],
+                    showTotal: false
+                });
+
+                let carry2 = 0;
+                let carries2 = Array(lenA).fill(' ');
+
+                for (let i = lenA - 1; i >= 0; i--) {
+                    const uA = parseInt(strA[i]);
+                    const prod = tB * uA + carry2;
+                    const writeDig = prod % 10;
+                    const prevCarry = carry2;
+                    carry2 = Math.floor(prod / 10);
+
+                    if (carry2 > 0 && i > 0) {
+                        carries2[i - 1] = carry2.toString();
+                    }
+
+                    line2[i + 1] = writeDig.toString();
+
+                    let exp = `<b>Mengalikan dengan Puluhan (${tB})</b>:<br>`;
+                    exp += `Kalikan ${tB} × ${uA} = ${tB * uA}. `;
+                    if (prevCarry > 0) exp += `Tambahkan angka simpanan: + ${prevCarry} = <b>${prod}</b>. `;
+                    exp += `<br>Tulis angka satuan <b>${writeDig}</b> bergeser ke kiri. `;
+                    if (carry2 > 0) {
+                        if (i > 0) exp += `Simpan puluhannya (<b>${carry2}</b>) di kolom kiri.`;
+                        else {
+                            line2[0] = carry2.toString();
+                            exp += `Tulis sisa angka simpanan <b>${carry2}</b> langsung di depan.`;
+                        }
+                    }
+
+                    steps.push({
+                        type: 'mult2',
+                        explanation: exp,
+                        activeCells: [`t-${i}`, `b-0`, `line2-${i+1}`],
+                        carries1: [...carries1],
+                        carries2: [...carries2],
+                        line1: [...line1],
+                        line2: [...line2],
+                        showTotal: false
+                    });
+                }
+            }
+
+            // Final Addition step
+            steps.push({
+                type: 'sum',
+                explanation: `<b>Langkah Akhir: Penjumlahan Bersusun</b><br>Tambahkan semua baris hasil perkalian di atas secara vertikal: <br>Hasil Akhir dari <b>${appState.mult.a} × ${appState.mult.b} = ${finalRes}</b>!`,
+                activeCells: [],
+                carries1: Array(lenA).fill(' '),
+                carries2: Array(lenA).fill(' '),
+                line1: [...line1],
+                line2: [...line2],
+                showTotal: true
+            });
+
+            appState.mult.steps = steps;
+            document.getElementById('mult-step-total').textContent = steps.length;
+        }
+
+        function renderMultStep(idx) {
+            const step = appState.mult.steps[idx];
+            if (!step) return;
+
+            document.getElementById('mult-step-idx').textContent = idx + 1;
+            document.getElementById('btn-mult-prev').disabled = idx === 0;
+            document.getElementById('btn-mult-next').disabled = idx === appState.mult.steps.length - 1;
+
+            const strA = appState.mult.a.toString();
+            const strB = appState.mult.b.toString();
+            const finalRes = appState.mult.a * appState.mult.b;
+
+            // Maximum columns required
+            const maxCols = Math.max(strA.length + strB.length, finalRes.toString().length);
+
+            let html = `<table class="font-mono text-2xl md:text-3xl text-slate-800 text-right">`;
+
+            // Carry row 2 (if any)
+            html += `<tr class="text-xs font-bold text-indigo-500 h-6">`;
+            for (let i = 0; i < maxCols; i++) {
+                // Offset calculation to align right
+                const idxA = i - (maxCols - strA.length - 1);
+                let carryVal = step.carries2[idxA];
+                if (carryVal && carryVal !== ' ') {
+                    html += `<td class="w-8 text-center bg-indigo-50 text-indigo-600 rounded">${carryVal}</td>`;
+                } else {
+                    html += `<td></td>`;
+                }
+            }
+            html += `<td></td></tr>`;
+
+            // Carry row 1
+            html += `<tr class="text-xs font-bold text-rose-500 h-6">`;
+            for (let i = 0; i < maxCols; i++) {
+                const idxA = i - (maxCols - strA.length);
+                let carryVal = step.carries1[idxA];
+                if (carryVal && carryVal !== ' ') {
+                    html += `<td class="w-8 text-center bg-rose-50 text-rose-600 rounded">${carryVal}</td>`;
+                } else {
+                    html += `<td></td>`;
+                }
+            }
+            html += `<td></td></tr>`;
+
+            // Row A (A)
+            html += `<tr class="h-10 font-black">`;
+            for (let i = 0; i < maxCols; i++) {
+                const idxA = i - (maxCols - strA.length);
+                if (idxA >= 0 && idxA < strA.length) {
+                    const highlight = step.activeCells.includes(`t-${idxA}`) ? 'bg-indigo-100 text-indigo-700 scale-105 border border-indigo-200 rounded' : '';
+                    html += `<td class="w-8 text-center ${highlight}">${strA[idxA]}</td>`;
+                } else {
+                    html += `<td></td>`;
+                }
+            }
+            html += `<td></td></tr>`;
+
+            // Row B (B)
+            html += `<tr class="h-10 font-black">`;
+            for (let i = 0; i < maxCols; i++) {
+                const idxB = i - (maxCols - strB.length);
+                if (idxB >= 0 && idxB < strB.length) {
+                    const highlight = step.activeCells.includes(`b-${idxB}`) ? 'bg-indigo-100 text-indigo-700 scale-105 border border-indigo-200 rounded' : '';
+                    html += `<td class="w-8 text-center ${highlight}">${strB[idxB]}</td>`;
+                } else {
+                    html += `<td></td>`;
+                }
+            }
+            html += `<td class="w-8 text-center text-amber-500 font-bold">×</td></tr>`;
+
+            // H-Line
+            html += `<tr><td colspan="${maxCols + 1}"><hr class="border-t-4 border-slate-400 my-1"></td></tr>`;
+
+            // Row Line 1
+            html += `<tr class="h-10 font-semibold text-slate-700">`;
+            // Line 1 result array is size lenA + 1
+            const line1Offset = maxCols - (strA.length + 1);
+            for (let i = 0; i < maxCols; i++) {
+                const idxL = i - line1Offset;
+                if (idxL >= 0 && idxL < step.line1.length) {
+                    const dig = step.line1[idxL];
+                    const highlight = step.activeCells.includes(`line1-${idxL}`) ? 'bg-amber-100 text-amber-700 font-black border border-amber-300 rounded' : '';
+                    html += `<td class="w-8 text-center ${highlight}">${dig === undefined || dig === ' ' ? '' : dig}</td>`;
+                } else {
+                    html += `<td></td>`;
+                }
+            }
+            html += `<td></td></tr>`;
+
+            // Row Line 2 (Only if B is 2 digits)
+            if (strB.length === 2) {
+                html += `<tr class="h-10 font-semibold text-slate-700">`;
+                const line2Offset = maxCols - (strA.length + 2);
+                for (let i = 0; i < maxCols; i++) {
+                    const idxL = i - line2Offset;
+                    if (idxL >= 0 && idxL < step.line2.length) {
+                        const dig = step.line2[idxL];
+                        let highlight = '';
+                        if (step.activeCells.includes(`line2-${idxL}`)) {
+                            highlight = 'bg-amber-100 text-amber-700 font-black border border-amber-300 rounded';
+                        } else if (idxL === step.line2.length - 1 && step.type === 'shift') {
+                            highlight = 'bg-amber-200 text-amber-900 font-bold border-2 border-amber-400 rounded scale-105';
+                        }
+                        html += `<td class="w-8 text-center ${highlight}">${dig === undefined || dig === ' ' ? '' : dig}</td>`;
+                    } else {
+                        html += `<td></td>`;
+                    }
+                }
+                html += `<td></td></tr>`;
+            }
+
+            // H-Line 2 (only show if results or total are displaying)
+            if (step.showTotal) {
+                html += `<tr><td colspan="${maxCols + 1}"><hr class="border-t-4 border-slate-400 my-1"></td></tr>`;
+                // Sum row
+                html += `<tr class="h-10 font-black text-emerald-600 bg-emerald-50 rounded">`;
+                const strFinal = finalRes.toString();
+                const finalOffset = maxCols - strFinal.length;
+                for (let i = 0; i < maxCols; i++) {
+                    const idxF = i - finalOffset;
+                    if (idxF >= 0 && idxF < strFinal.length) {
+                        html += `<td class="w-8 text-center border border-emerald-300">${strFinal[idxF]}</td>`;
+                    } else {
+                        html += `<td></td>`;
+                    }
+                }
+                html += `<td class="w-8 text-center text-emerald-500 font-bold">+</td></tr>`;
+            }
+
+            html += `</table>`;
+            document.getElementById('mult-board').innerHTML = html;
+
+            // Explanation Card
+            document.getElementById('mult-explanation-card').innerHTML = `
+                <span class="text-xs font-black text-amber-900 font-kids uppercase block tracking-wider">Penjelasan:</span>
+                <p class="text-xs leading-relaxed text-amber-950 font-semibold">${step.explanation}</p>
+            `;
+
+            // Checklist rendering
+            const checklistContainer = document.getElementById('mult-checklist');
+            const items = [
+                { text: `Kalikan baris atas dengan satuan bawah (${strB[strB.length - 1]})`, done: step.type === 'mult1' || step.type === 'shift' || step.type === 'mult2' || step.type === 'sum' },
+                { text: `Cek pergeseran baris kedua dengan bantuan angka 0`, done: (strB.length === 2 && (step.type === 'shift' || step.type === 'mult2' || step.type === 'sum')) || strB.length === 1 },
+                { text: `Kalikan baris atas dengan puluhan bawah (${strB.length === 2 ? strB[0] : '-'})`, done: (strB.length === 2 && (step.type === 'mult2' || step.type === 'sum')) || strB.length === 1 },
+                { text: "Lakukan penjumlahan akhir hasil perkalian bersusun", done: step.showTotal }
+            ];
+            checklistContainer.innerHTML = '';
+            items.forEach((item) => {
+                const div = document.createElement('div');
+                div.className = `flex items-center space-x-2 ${item.done ? 'text-emerald-700' : 'text-slate-400'}`;
+                div.innerHTML = `
+                    <span>${item.done ? '✅' : '⬜'}</span>
+                    <span class="${item.done ? 'font-black' : 'font-normal'}">${item.text}</span>
+                `;
+                checklistContainer.appendChild(div);
+            });
+        }
+
+        function changeMultStep(delta) {
+            const nextIdx = appState.mult.currentStep + delta;
+            if (nextIdx >= 0 && nextIdx < appState.mult.steps.length) {
+                playSfx('click');
+                appState.mult.currentStep = nextIdx;
+                renderMultStep(nextIdx);
+            }
+        }
+
+
+        // ================= BAB 3: DIVISION (POROGAPIT) DINAMIS ENGINE =================
+        function loadDivPreset(a, b) {
+            document.getElementById('div-input-a').value = a;
+            document.getElementById('div-input-b').value = b;
+            resetDivSimulator();
+        }
+
+        function resetDivSimulator() {
+            let valA = parseInt(document.getElementById('div-input-a').value) || 0;
+            let valB = parseInt(document.getElementById('div-input-b').value) || 0;
+
+            if (valA > 9999) { valA = 9999; document.getElementById('div-input-a').value = 9999; }
+            if (valB > 9) { valB = 9; document.getElementById('div-input-b').value = 9; }
+            if (valA < 10) { valA = 10; document.getElementById('div-input-a').value = 10; }
+            if (valB < 2) { valB = 2; document.getElementById('div-input-b').value = 2; }
+
+            appState.div.a = valA;
+            appState.div.b = valB;
+            appState.div.currentStep = 0;
+
+            generateDivSteps();
+            renderDivStep(0);
+        }
+
+        function generateDivSteps() {
+            const steps = [];
+            const strA = appState.div.a.toString();
+            const divisor = appState.div.b;
+            const len = strA.length;
+
+            // Alignment Step
+            steps.push({
+                pillar: 'bagi',
+                explanation: `<b>Langkah Awal Porogapit</b><br>Tulis pembagi <b>${divisor}</b> di luar rumah kurung, dan angka yang dibagi <b>${appState.div.a}</b> di dalam rumah kurung porogapit.`,
+                top: Array(len).fill(' '),
+                under: Array(len).fill(' '),
+                rest: [],
+                activeColumn: -1
+            });
+
+            let currentVal = 0;
+            let topAnswers = Array(len).fill(' ');
+            let underValue = Array(len).fill(' ');
+            let restLayout = [];
+            let currentStr = "";
+            let digitPointer = 0;
+
+            while (digitPointer < len) {
+                const nextDigit = strA[digitPointer];
+                currentStr += nextDigit;
+                currentVal = parseInt(currentStr);
+
+                // Check if currentVal is smaller than divisor and it is the first digit
+                if (currentVal < divisor && digitPointer === 0 && len > 1) {
+                    // Pull next digit immediately
+                    digitPointer++;
+                    currentStr += strA[digitPointer];
+                    currentVal = parseInt(currentStr);
+                }
+
+                // Step: BAGI
+                const q = Math.floor(currentVal / divisor);
+                topAnswers[digitPointer] = q.toString();
+
+                let bagiExplanation = `<b>BAGI</b>:<br>Ambil sisa/angka aktif di bawah yaitu <b>${currentVal}</b>, lalu bagi dengan <b>${divisor}</b>.`;
+                if (q === 0) {
+                    bagiExplanation += `<br>Karena ${currentVal} tidak bisa dibagi ${divisor}, tulis angka <b>0</b> di atas kepala hasil.`;
+                } else {
+                    bagiExplanation += `<br>${currentVal} ÷ ${divisor} = <b>${q}</b> (dengan sisa ${currentVal % divisor}). Tulis angka ${q} di baris atas hasil.`;
+                }
+
+                steps.push({
+                    pillar: 'bagi',
+                    explanation: bagiExplanation,
+                    top: [...topAnswers],
+                    under: digitPointer === (currentStr.length - 1) ? [q * divisor, ...Array(len-1).fill(' ')] : [...underValue],
+                    rest: [...restLayout],
+                    activeColumn: digitPointer
+                });
+
+                // Step: KALI
+                const multiResult = q * divisor;
+                let activeUnder = [...underValue];
+                
+                // Position under value correctly
+                const paddingLeft = digitPointer - (currentStr.length - 1);
+                
+                let kaliExplanation = `<b>KALI</b>:<br>Kalikan hasil atas barumu yaitu <b>${q}</b> dengan pembagi <b>${divisor}</b>.<br> ${q} × ${divisor} = <b>${multiResult}</b>.<br>Tulis angka ${multiResult} sejajar di bawah nilai pembagian tadi.`;
+
+                steps.push({
+                    pillar: 'kali',
+                    explanation: kaliExplanation,
+                    top: [...topAnswers],
+                    under: [...underValue], // visual representation handled dynamically in render
+                    rest: [...restLayout, { text: multiResult.toString(), indent: paddingLeft, highlight: true }],
+                    activeColumn: digitPointer
+                });
+
+                // Step: KURANG
+                const remainder = currentVal - multiResult;
+                let kurangExplanation = `<b>KURANG</b>:<br>Kurangi nilai vertikal di bawah: ${currentVal} − ${multiResult} = <b>${remainder}</b>.<br>Tulis sisa pengurangannya di baris bawah.`;
+                
+                restLayout.push({ text: multiResult.toString(), indent: paddingLeft });
+                restLayout.push({ line: true });
+                
+                const nextLayoutState = [...restLayout, { text: remainder.toString(), indent: paddingLeft }];
+
+                steps.push({
+                    pillar: 'kurang',
+                    explanation: kurangExplanation,
+                    top: [...topAnswers],
+                    under: [...underValue],
+                    rest: nextLayoutState,
+                    activeColumn: digitPointer
+                });
+
+                // Prepare for next loop
+                currentStr = remainder.toString();
+                if (remainder === 0 && digitPointer < len - 1) {
+                    currentStr = ""; // reset prefix if division became 0 but more numbers remain
+                }
+
+                // Step: TURUNKAN (If digits remaining)
+                if (digitPointer < len - 1) {
+                    digitPointer++;
+                    const pulledDigit = strA[digitPointer];
+                    let displayPull = currentStr + pulledDigit;
+                    
+                    let turunExplanation = `<b>TURUNKAN</b>:<br>Turunkan angka berikutnya yaitu <b>${pulledDigit}</b> untuk bergabung dengan sisa pengurangan tadi.<br>Sekarang, angka aktif di bawah terkumpul menjadi <b>${displayPull || pulledDigit}</b>.`;
+
+                    restLayout.push({ text: displayPull, indent: paddingLeft, isPulled: true });
+
+                    steps.push({
+                        pillar: 'turun',
+                        explanation: turunExplanation,
+                        top: [...topAnswers],
+                        under: [...underValue],
+                        rest: [...restLayout],
+                        activeColumn: digitPointer
+                    });
+                } else {
+                    // Reached end
+                    digitPointer++;
+                }
+            }
+
+            // Final wrap-up step
+            const isFinished = currentVal % divisor === 0;
+            steps.push({
+                pillar: 'kurang',
+                explanation: `<b>Porogapit Selesai!</b><br>Seluruh angka sudah diturunkan dan sisa hasil akhir pengurangannya adalah <b>${currentVal % divisor}</b>.<br>Maka hasil akhir dari <b>${appState.div.a} ÷ ${divisor} = ${topAnswers.join('').trim()}</b>${isFinished ? ' (Habis Dibagi)' : ' (Ada Sisa)'}.`,
+                top: [...topAnswers],
+                under: [...underValue],
+                rest: [...restLayout],
+                activeColumn: -1
+            });
+
+            appState.div.steps = steps;
+            document.getElementById('div-step-total').textContent = steps.length;
+        }
+
+        function renderDivStep(idx) {
+            const step = appState.div.steps[idx];
+            if (!step) return;
+
+            document.getElementById('div-step-idx').textContent = idx + 1;
+            document.getElementById('btn-div-prev').disabled = idx === 0;
+            document.getElementById('btn-div-next').disabled = idx === appState.div.steps.length - 1;
+
+            // Highlight Pillar Navs
+            const pillars = ['bagi', 'kali', 'kurang', 'turun'];
+            pillars.forEach(p => {
+                const el = document.getElementById('div-pillar-' + p);
+                if (step.pillar === p && idx > 0) {
+                    el.className = "p-2 rounded-xl border-emerald-500 bg-emerald-500 text-white font-black scale-105 transition-all duration-300 shadow-md";
+                } else {
+                    el.className = "p-2 rounded-xl border-slate-200 bg-white text-slate-400 font-bold transition-all duration-300";
+                }
+            });
+
+            // Construct Porogapit Board Rendering
+            const container = document.getElementById('div-board');
+            const strA = appState.div.a.toString();
+            const divisor = appState.div.b;
+            const len = strA.length;
+
+            let html = `<div class="font-mono text-2xl md:text-3xl text-slate-800 flex flex-col items-center">`;
+            html += `<div class="relative inline-block text-left">`;
+
+            // Row 1: Top Answers (Quotient)
+            html += `<div class="flex justify-end pb-1 pr-4" style="margin-left: 2.5rem;">`;
+            for (let i = 0; i < len; i++) {
+                const digit = step.top[i];
+                const isCurrent = step.activeColumn === i;
+                const txtColor = isCurrent ? 'text-emerald-600 font-black scale-110' : 'text-slate-500 font-bold';
+                html += `<span class="w-8 text-center ${txtColor}">${digit === ' ' || digit === undefined ? '&nbsp;' : digit}</span>`;
+            }
+            html += `</div>`;
+
+            // Row 2: Divisor & Dividen Main Bracket
+            html += `<div class="flex items-center">`;
+            html += `<span class="w-8 text-center font-black text-indigo-700 mr-2">${divisor}</span>`;
+            html += `<div class="border-t-4 border-l-4 border-slate-700 rounded-tl-xl pl-2 pr-4 py-1 flex">`;
+            for (let i = 0; i < len; i++) {
+                const isCurrent = step.activeColumn === i;
+                const highlight = isCurrent ? 'bg-amber-100 rounded text-amber-900 border border-amber-300' : '';
+                html += `<span class="w-8 text-center font-black ${highlight}">${strA[i]}</span>`;
+            }
+            html += `</div></div>`;
+
+            // Step calculations rendered below
+            html += `<div class="flex flex-col items-start" style="margin-left: 2.5rem; padding-left: 0.5rem;">`;
+            step.rest.forEach((item) => {
+                if (item.line) {
+                    html += `<div class="w-24 my-1"><hr class="border-t-2 border-slate-500"></div>`;
+                } else {
+                    let padding = `padding-left: ${item.indent * 2}rem;`;
+                    let classes = "font-black tracking-widest text-slate-700 flex ";
+                    if (item.highlight) {
+                        classes += "bg-amber-100 border border-amber-300 text-amber-800 px-1 rounded ";
+                    } else if (item.isPulled) {
+                        classes += "text-indigo-600 border-b border-dashed border-indigo-400 ";
+                    }
+                    html += `<div class="${classes}" style="${padding}">${item.text}</div>`;
+                }
+            });
+            html += `</div>`;
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+
+            // Explanation Card
+            document.getElementById('div-explanation-card').innerHTML = `
+                <span class="text-xs font-black text-emerald-950 font-kids uppercase block tracking-wider">Penjelasan:</span>
+                <p class="text-xs leading-relaxed text-emerald-900 font-semibold">${step.explanation}</p>
+            `;
+        }
+
+        function changeDivStep(delta) {
+            const nextIdx = appState.div.currentStep + delta;
+            if (nextIdx >= 0 && nextIdx < appState.div.steps.length) {
+                playSfx('click');
+                appState.div.currentStep = nextIdx;
+                renderDivStep(nextIdx);
+            }
+        }
+
+
+        // ================= BAB 4: QUIZ INTERACTIVE =================
+        const QUIZ_ITEMS = [
+            // Bab 1
+            {
+                num: 1,
+                bab: 1,
+                category: "Bilangan Bulat",
+                prompt: "Berapa hasil dari 24 + (-15)?",
+                options: ["9", "-9", "39", "-39"],
+                correctIdx: 0,
+                solution: "Kamu punya uang 24, sedangkan hutangmu sebesar 15. Bayar hutang dengan uang tersebut, sehingga sisa uangmu sekarang adalah 24 − 15 = 9."
+            },
+            {
+                num: 2,
+                bab: 1,
+                category: "Bilangan Bulat",
+                prompt: "Berapa hasil dari -18 + (-7)?",
+                options: ["-11", "11", "-25", "25"],
+                correctIdx: 2,
+                solution: "Kamu memiliki hutang sebesar 18, lalu kamu berhutang lagi sebesar 7. Karena berhutang dua kali berturut-turut, total hutangmu bertambah menumpuk menjadi -18 + (-7) = -25."
+            },
+            {
+                num: 3,
+                bab: 1,
+                category: "Bilangan Bulat",
+                prompt: "Berapa hasil dari -12 + 20?",
+                options: ["32", "8", "-8", "-32"],
+                correctIdx: 1,
+                solution: "Hutang awalmu adalah 12, lalu dibayar dengan uang saku sebesar 20. Karena uangmu lebih banyak dari hutang, sisa uang yang kamu miliki sekarang adalah 20 − 12 = 8."
+            },
+            {
+                num: 4,
+                bab: 1,
+                category: "Bilangan Bulat",
+                prompt: "Berapa hasil dari 15 - (-8)?",
+                options: ["7", "-7", "23", "-23"],
+                correctIdx: 2,
+                solution: "Menggunakan Trik Mantra Sihir: Tanda minus ganda yang berhimpitan berubah menjadi tambah. Maka persamaannya berubah menjadi 15 + 8 = 23."
+            },
+            {
+                num: 5,
+                bab: 1,
+                category: "Bilangan Bulat",
+                prompt: "Berapa hasil dari -9 - (-14)?",
+                options: ["5", "-5", "-23", "23"],
+                correctIdx: 0,
+                solution: "Tanda ganda berubah menjadi tambah: -9 - (-14) = -9 + 14. Hutangmu 9 dibayar dengan uang saku sebesar 14, maka kamu memiliki sisa uang sebanyak 14 − 9 = 5."
+            },
+            // Bab 2
+            {
+                num: 6,
+                bab: 2,
+                category: "Perkalian Bersusun",
+                prompt: "Berapakah hasil dari 48 × 12?",
+                options: ["486", "526", "576", "616"],
+                correctIdx: 2,
+                solution: "Langkah bersusun:<br>1) Kalikan 48 × 2 = 96<br>2) Kalikan 48 × 1 = 48 (geser ke kiri satu kolom)<br>3) Jumlahkan: 96 + 480 = 576."
+            },
+            {
+                num: 7,
+                bab: 2,
+                category: "Perkalian Bersusun",
+                prompt: "Berapakah hasil dari 135 × 24?",
+                options: ["3.120", "3.240", "2.980", "3.360"],
+                correctIdx: 1,
+                solution: "Langkah bersusun:<br>1) 135 × 4 = 540<br>2) 135 × 2 = 270 (ditulis bergeser)<br>3) Jumlahkan hasil: 540 + 2.700 = 3.240."
+            },
+            {
+                num: 8,
+                bab: 2,
+                category: "Perkalian Bersusun",
+                prompt: "Berapakah hasil dari 207 × 46?",
+                options: ["9.522", "9.432", "8.912", "9.802"],
+                correctIdx: 0,
+                solution: "Langkah bersusun:<br>1) 207 × 6 = 1.242<br>2) 207 × 4 = 828 (geser satu kolom)<br>3) Jumlahkan hasil: 1.242 + 8.280 = 9.522."
+            },
+            // Bab 3
+            {
+                num: 9,
+                bab: 3,
+                category: "Porogapit",
+                prompt: "Selesaikan pembagian 432 ÷ 4 memakai porogapit!",
+                options: ["18", "108", "118", "180"],
+                correctIdx: 1,
+                solution: "Ingat aturan emas nol! <br>• 4 ÷ 4 = 1<br>• Turunkan angka 3. Karena 3 tidak bisa dibagi 4, <b>tulis 0 di atas</b>!<br>• Baru setelah itu kamu boleh menurunkan angka 2 berikutnya sehingga terbentuk angka 32.<br>• 32 ÷ 4 = 8. Hasil akhir adalah 108."
+            },
+            {
+                num: 10,
+                bab: 3,
+                category: "Porogapit",
+                prompt: "Berapakah hasil dari pembagian 912 ÷ 8?",
+                options: ["114", "104", "124", "116"],
+                correctIdx: 0,
+                solution: "Langkah porogapit:<br>1) 9 ÷ 8 = 1 (sisa 1), turunkan angka 1 menjadi 11.<br>2) 11 ÷ 8 = 1 (sisa 3), turunkan angka 2 menjadi 32.<br>3) 32 ÷ 8 = 4. Hasil akhir digabungkan: 114."
+            },
+            {
+                num: 11,
+                bab: 3,
+                category: "Porogapit (Dua Digit)",
+                prompt: "Selesaikan tantangan pembagi dua digit: 1.625 ÷ 13!",
+                options: ["115", "125", "135", "145"],
+                correctIdx: 1,
+                solution: "Porogapit pembagi 13:<br>• Karena pembagi berukuran 2 digit, ambil 16 sekaligus: 16 ÷ 13 = 1 (sisa 3), turunkan 2 menjadi 32.<br>• 32 ÷ 13 = 2 (karena 13 × 2 = 26), sisa pengurangan 32 − 26 = 6, turunkan 5 menjadi 65.<br>• 65 ÷ 13 = 5. Hasil akhirnya adalah 125."
+            }
+        ];
+
+        let activeQuizNum = 1; // start from Q1
+
+        function renderQuizLayout() {
+            // Generate Navs
+            const g1 = document.getElementById('nav-group-bab1');
+            const g2 = document.getElementById('nav-group-bab2');
+            const g3 = document.getElementById('nav-group-bab3');
+
+            g1.innerHTML = '';
+            g2.innerHTML = '';
+            g3.innerHTML = '';
+
+            QUIZ_ITEMS.forEach(q => {
+                const btn = document.createElement('button');
+                btn.id = 'quiz-nav-btn-' + q.num;
+                btn.onclick = () => { selectQuestion(q.num); };
+                btn.className = getQuizNavStyle(q.num);
+                btn.textContent = q.num;
+
+                if (q.bab === 1) g1.appendChild(btn);
+                else if (q.bab === 2) g2.appendChild(btn);
+                else if (q.bab === 3) g3.appendChild(btn);
+            });
+
+            // Update score
+            updateScoreDisplay();
+        }
+
+        function getQuizNavStyle(num) {
+            const answered = appState.quizAnswers[num] !== undefined;
+            const isActive = activeQuizNum === num;
+
+            if (isActive) {
+                return "py-2 text-sm font-black rounded-lg border-2 border-indigo-600 bg-indigo-100 text-indigo-950 scale-105 shadow-sm";
+            }
+            if (answered) {
+                const isCorrect = appState.quizAnswers[num] === QUIZ_ITEMS[num-1].correctIdx;
+                return `py-2 text-sm font-bold rounded-lg border-2 ${isCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-rose-500 border-rose-600 text-white'}`;
+            }
+            return "py-2 text-sm font-semibold rounded-lg border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100";
+        }
+
+        function selectQuestion(num) {
+            playSfx('click');
+            activeQuizNum = num;
+            loadQuestion(num);
+            
+            // Re-render navs to update highlights
+            renderQuizLayout();
+        }
+
+        function loadQuestion(num) {
+            const q = QUIZ_ITEMS[num - 1];
+            document.getElementById('quiz-display-num').textContent = q.num;
+            document.getElementById('quiz-badge-category').textContent = q.category;
+            document.getElementById('quiz-prompt-text').textContent = q.prompt;
+
+            const answered = appState.quizAnswers[num] !== undefined;
+            const statusEl = document.getElementById('quiz-item-status');
+            const solutionCard = document.getElementById('quiz-solution-card');
+
+            if (answered) {
+                statusEl.className = "text-xs font-black text-emerald-600";
+                statusEl.textContent = "Sudah Dijawab";
+                solutionCard.classList.remove('hidden');
+                document.getElementById('quiz-solution-text').innerHTML = q.solution;
+            } else {
+                statusEl.className = "text-xs font-bold text-slate-400";
+                statusEl.textContent = "Belum Dijawab";
+                solutionCard.classList.add('hidden');
+            }
+
+            // Render option buttons
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = getOptionButtonStyle(num, idx);
+                btn.innerHTML = opt;
+                btn.disabled = answered;
+                btn.onclick = () => { submitQuizAnswer(idx); };
+                container.appendChild(btn);
+            });
+        }
+
+        function getOptionButtonStyle(qNum, optIdx) {
+            const answered = appState.quizAnswers[qNum] !== undefined;
+            const baseClass = "py-4 px-3 border-2 text-center text-lg font-black rounded-2xl transition duration-150 bounce-active w-full";
+
+            if (answered) {
+                const chosenIdx = appState.quizAnswers[qNum];
+                const correctIdx = QUIZ_ITEMS[qNum-1].correctIdx;
+
+                if (optIdx === correctIdx) {
+                    return `${baseClass} bg-emerald-500 border-emerald-700 text-white`;
+                }
+                if (optIdx === chosenIdx) {
+                    return `${baseClass} bg-rose-500 border-rose-700 text-white`;
+                }
+                return `${baseClass} bg-slate-50 border-slate-200 text-slate-300`;
+            }
+
+            return `${baseClass} bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-900`;
+        }
+
+        function submitQuizAnswer(idx) {
+            const q = QUIZ_ITEMS[activeQuizNum - 1];
+            appState.quizAnswers[activeQuizNum] = idx;
+
+            const isCorrect = idx === q.correctIdx;
+            if (isCorrect) {
+                playSfx('correct');
+                appState.quizScores += 10;
+            } else {
+                playSfx('wrong');
+            }
+
+            // Save Progress locally
+            localStorage.setItem('smp_math_quiz_answers', JSON.stringify(appState.quizAnswers));
+            localStorage.setItem('smp_math_quiz_score', appState.quizScores);
+
+            // Reload Layout & Question to show results
+            renderQuizLayout();
+            loadQuestion(activeQuizNum);
+        }
+
+        function updateScoreDisplay() {
+            const score = appState.quizScores;
+            document.getElementById('header-stars').textContent = `${score} / 110 ⭐`;
+            
+            // Progress Bar text
+            const answeredCount = Object.keys(appState.quizAnswers).length;
+            document.getElementById('quiz-progress-text').textContent = `${answeredCount} / 11 Soal`;
+        }
+
+        function resetEntireQuiz() {
+            if (confirm("Apakah kamu yakin ingin mengulang seluruh kuis dari awal?")) {
+                playSfx('click');
+                appState.quizAnswers = {};
+                appState.quizScores = 0;
+                localStorage.removeItem('smp_math_quiz_answers');
+                localStorage.removeItem('smp_math_quiz_score');
+                
+                activeQuizNum = 1;
+                renderQuizLayout();
+                loadQuestion(1);
+            }
+        }
+
+        // --- LOAD INITIAL DATA ---
+        function loadSavedProgress() {
+            const savedAnswers = localStorage.getItem('smp_math_quiz_answers');
+            const savedScore = localStorage.getItem('smp_math_quiz_score');
+            
+            if (savedAnswers) {
+                try {
+                    appState.quizAnswers = JSON.parse(savedAnswers);
+                    appState.quizScores = parseInt(savedScore) || 0;
+                } catch (e) {
+                    appState.quizAnswers = {};
+                    appState.quizScores = 0;
+                }
+            }
+        }
+
+        // --- WINDOW LOAD INITIALIZER ---
+        window.onload = function() {
+            loadSavedProgress();
+            switchTab('intro');
+        };
+    </script>
+</body>
+</html>
